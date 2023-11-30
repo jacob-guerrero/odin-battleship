@@ -51,8 +51,19 @@ const Gameboard = () => {
     }
   };
 
+  const receiveAttack = (x, y) => {
+    if (gameBoard[x][y] === 1) {
+      // console.log("Hit!");
+      gameBoard[x][y] = -1; // Mark the hit on the board
+      return true;
+    } else {
+      // console.log("Missed shot!");
+      missedAttacks.push([x, y]);
+      return false;
+    }
+  };
 
-  return { gameBoard, placeShip };
+  return { gameBoard, placeShip, receiveAttack };
 };
 
 module.exports = Gameboard;
