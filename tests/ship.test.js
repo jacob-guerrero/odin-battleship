@@ -9,5 +9,5 @@ test("ship is created with its length", () => {
 });
 
 test("ship is sunk", () => {
-  expect(firstShip.isSunk()).toBeFalsy();
+  expect(firstShip.isSunk()).toBeTruthy();
 });

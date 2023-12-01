@@ -6,7 +6,7 @@ const Ship = (length) => {
   };
 
   const isSunk = () => {
-    return hits === length ? true : false;
+    return hits === length;
   };
 
   return { length, hit, isSunk };

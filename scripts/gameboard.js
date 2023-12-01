@@ -1,8 +1,12 @@
 const Ship = require("./ship");
-const battleship = Ship(4);
 
 const Gameboard = () => {
   // const boardSize = 10;
+  // 0 = no ship
+  // 1 = ship
+  // -1 = missed shot
+  // 2 = hit ship
+
   const ships = [];
   const missedAttacks = [];
 
@@ -54,7 +58,14 @@ const Gameboard = () => {
   const receiveAttack = (x, y) => {
     if (gameBoard[x][y] === 1) {
       // console.log("Hit!");
-      gameBoard[x][y] = -1; // Mark the hit on the board
+
+      // Find the ship based on coordinates
+      const hitShip = ships.find((ship) =>
+        ship.coordinates.some((coord) => coord[0] === x && coord[1] === y)
+      );
+
+      gameBoard[x][y] = 2; // Mark the hit on the board
+      hitShip.hit();
       return true;
     } else {
       // console.log("Missed shot!");
