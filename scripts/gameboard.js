@@ -1,5 +1,3 @@
-const Ship = require("./ship");
-
 const Gameboard = () => {
   // const boardSize = 10;
   // 0 = no ship
