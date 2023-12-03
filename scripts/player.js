@@ -17,7 +17,15 @@ const Player = (name) => {
     }
   };
 
-  return { name, makeRandomAttack };
+  const attack = (x, y, opponentGameboard) => {
+    if (!attacks.some((coord) => coord[0] === x && coord[1] === y)) {
+      attacks.push([x, y]);
+      opponentGameboard.receiveAttack(x, y);
+      return { x, y };
+    }
+  };
+
+  return { name, makeRandomAttack, attack };
 };
 
 module.exports = Player;
