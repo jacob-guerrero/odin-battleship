@@ -15,3 +15,8 @@ gameBoard2.placeShip(ship2, 4, 4, true);
 test("Player 1 attacks computer", () => {
   expect(player1.attack(2, 2, gameBoard2)).toStrictEqual({ x: 2, y: 2 });
 });
+
+test("Computer attacks player 2", () => {
+  expect(player2.makeRandomAttack(gameBoard1)).toBeDefined();
+  expect(player2.makeRandomAttack(gameBoard1)).not.toBeNull();
+});
