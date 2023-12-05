@@ -21,3 +21,15 @@ test("Ship coordinates", () => {
     [7, 4],
   ]);
 });
+
+test("Hit ship", () => {
+  expect(gameBoard1.receiveAttack(0, 4)).toBeTruthy();
+  expect(gameBoard1.receiveAttack(0, 7)).toBeTruthy();
+});
+
+test("Miss shot", () => {
+  expect(gameBoard1.receiveAttack(0, 8)).toBeFalsy();
+  expect(gameBoard1.receiveAttack(0, 3)).toBeFalsy();
+  expect(gameBoard1.receiveAttack(1, 4)).toBeFalsy();
+});
+
