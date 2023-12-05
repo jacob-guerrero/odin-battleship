@@ -33,3 +33,23 @@ test("Miss shot", () => {
   expect(gameBoard1.receiveAttack(1, 4)).toBeFalsy();
 });
 
+test("Ship is not shunk", () => {
+  expect(gameBoard1.receiveAttack(7, 7)).toBeTruthy();
+  expect(ship2.isSunk()).toBeFalsy();
+});
+
+test("Ship is shunk", () => {
+  expect(gameBoard1.receiveAttack(7, 8)).toBeTruthy();
+  expect(ship2.isSunk()).toBeTruthy();
+});
+
+test("All ships sunk", () => {
+  expect(gameBoard1.allShipsSunk()).toBeFalsy();
+  expect(gameBoard1.receiveAttack(0, 5)).toBeTruthy();
+  expect(gameBoard1.receiveAttack(0, 6)).toBeTruthy();
+  expect(gameBoard1.allShipsSunk()).toBeFalsy();
+  expect(gameBoard1.receiveAttack(5, 4)).toBeTruthy();
+  expect(gameBoard1.receiveAttack(6, 4)).toBeTruthy();
+  expect(gameBoard1.receiveAttack(7, 4)).toBeTruthy();
+  expect(gameBoard1.allShipsSunk()).toBeTruthy();
+});
