@@ -61,12 +61,13 @@ const Gameboard = () => {
       const hitShip = ships.find((ship) =>
         ship.coordinates.some((coord) => coord[0] === x && coord[1] === y)
       );
-
+      
       gameBoard[x][y] = 2; // Mark the hit on the board
       hitShip.hit();
       return true;
     } else {
       // console.log("Missed shot!");
+      gameBoard[x][y] = -1;
       missedAttacks.push([x, y]);
       return false;
     }
