@@ -67,11 +67,67 @@ const updateCellValue = (cell, cellValue) => {
 };
 
 const playerLogic = (gameboard, x, y, player1) => {
+  console.log(gameboard);
+  player1.attack(x, y, gameboard);
+  const cellToUpdate = document.querySelector(
+    `#player2-board [data-x="${x}"][data-y="${y}"]`
+  );
+
+  if (cellToUpdate) {
+    updateCellValue(cellToUpdate, gameboard.gameBoard[x][y]);
+  }
 };
 const computerLogic = (gameboard, player2) => {
+  const computerAttack = player2.makeRandomAttack(gameboard);
+  const x = computerAttack.x;
+  const y = computerAttack.y;
+
+  const cellToUpdate = document.querySelector(
+    `#player1-board [data-x="${x}"][data-y="${y}"]`
+  );
+
+  if (cellToUpdate) {
+    updateCellValue(cellToUpdate, gameboard.gameBoard[x][y]);
+  }
 };
 
 const gameLoop = (player1, player2, player1Gameboard, player2Gameboard) => {
+  let currentPlayer = player1;
+
+  const handleAttack = (x, y) => {
+    const opponentGameboard =
+      currentPlayer === player1 ? player2Gameboard : player1Gameboard;
+    if (currentPlayer === player1) {
+      playerLogic(opponentGameboard, x, y, player1);
+    } else {
+      // computerLogic(opponentGameboard, player2);
+    }
+
+    // Check if the game is over
+    if (player1Gameboard.allShipsSunk() || player2Gameboard.allShipsSunk()) {
+      endGame();
+    } else {
+      // Computer turn and Switch players
+      const opponentGameboard2 =
+        currentPlayer === player1 ? player1Gameboard : player2Gameboard;
+      computerLogic(opponentGameboard2, player2);
+    }
+  };
+
+  // Add event listeners for user input (Player 1)
+  const enemyBoardElement = document.getElementById(`player2-board`);
+  enemyBoardElement.addEventListener("click", (event) => {
+    // Check if the clicked element is a cell
+    if (event.target.classList.contains("cell")) {
+      // Get the clicked coordinates from the dataset
+      console.log(event.target);
+      const x = +event.target.dataset.x;
+      const y = +event.target.dataset.y;
+
+      // Handle the attack
+      handleAttack(x, y);
+    }
+  });
 };
 
 // Function to end the game
