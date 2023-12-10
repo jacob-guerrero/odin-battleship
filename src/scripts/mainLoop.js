@@ -48,47 +48,47 @@ const computerLogic = (gameboard, player2) => {
 
 const gameLoop = (player1, player2, player1Gameboard, player2Gameboard) => {
   let currentPlayer = player1;
+  let isFinished = false;
 
   const handleAttack = (x, y) => {
-    const opponentGameboard =
-      currentPlayer === player1 ? player2Gameboard : player1Gameboard;
-    playerLogic(opponentGameboard, x, y, player1);
+    if (currentPlayer === player1) {
+      playerLogic(player2Gameboard, x, y, player1);
+    } else {
+      computerLogic(player1Gameboard, player2);
+    }
 
     // Check if the game is over
     if (player1Gameboard.allShipsSunk() || player2Gameboard.allShipsSunk()) {
-      endGame();
-    } else {
-      // Computer turn and Switch players
-      const opponentGameboard2 =
-        currentPlayer === player1 ? player1Gameboard : player2Gameboard;
-      computerLogic(opponentGameboard2, player2);
+      const enemyBoardElement = document.getElementById(`player2-board`);
+      enemyBoardElement.removeEventListener("click", inputAttack);
 
-      if (player1Gameboard.allShipsSunk() || player2Gameboard.allShipsSunk()) {
-        endGame();
-      }
+      isFinished = true;
+    } else {
+      // Switch players if it is not finished
+      currentPlayer = currentPlayer === player1 ? player2 : player1;
     }
   };
 
-  // Add event listeners for user input (Player 1)
-  const enemyBoardElement = document.getElementById(`player2-board`);
-  enemyBoardElement.addEventListener("click", (event) => {
+  // Add event listeners for Player 1
+  const inputAttack = (event) => {
     // Check if the clicked element is a cell
-    if (event.target.classList.contains("cell")) {
+    if (!isFinished && event.target.classList.contains("cell")) {
       // Get the clicked coordinates from the dataset
       const x = +event.target.dataset.x;
       const y = +event.target.dataset.y;
 
       // Handle the attack
       handleAttack(x, y);
-    }
-  });
 
-  // Function to end the game
-  const endGame = () => {
-    // Implement logic to display the winner or handle the end of the game
-    console.log("finished");
-    return;
+      // Switch players if it is not finished
+      if (!isFinished) {
+        handleAttack(x, y);
+      }
+    }
   };
+
+  const enemyBoardElement = document.getElementById(`player2-board`);
+  enemyBoardElement.addEventListener("click", inputAttack);
 };
 
 // Initialize the game
