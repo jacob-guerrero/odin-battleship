@@ -4,9 +4,32 @@ const interact = require("interactjs");
 const cellSize = 30; // Size of each cell
 
 const enableDragAndDrop = (gameboard) => {
+  const ships = [Ship(2), Ship(4)]; // Add more ships as needed
+
+  ships.forEach((ship) => {
+    const shipElement = createShipElement(ship);
+    document.body.appendChild(shipElement);
+  });
 };
 
 const createShipElement = (ship) => {
+  const shipElement = document.createElement("div");
+  shipElement.className = "ship";
+
+  // Adjust the ship's appearance
+  shipElement.style.width = ship.length * cellSize + "px";
+  shipElement.style.height = cellSize + "px";
+  shipElement.style.backgroundColor = "gray";
+
+  // Add a class to represent the ship's orientation (e.g., "vertical")
+  shipElement.classList.add("vertical");
+
+  // Handle orientation toggle on click
+  shipElement.addEventListener("click", () => {
+    shipElement.classList.toggle("vertical");
+  });
+
+  return shipElement;
 };
 
 // target elements with the "draggable" class

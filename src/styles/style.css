@@ -24,6 +24,15 @@ h1, h2, h3, p {
     text-align: center;
 }
 
+.container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* Adjust based on the board size */
+  justify-items: center;
+  margin: 30px;
+  gap: 30px;
+  max-width: 800px;
+}
+
 /* Gameboard */
 .game-board {
     display: grid;
