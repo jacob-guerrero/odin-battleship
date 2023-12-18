@@ -14,7 +14,7 @@ const enableDragAndDrop = (gameboard) => {
 
 const createShipElement = (ship) => {
   const shipElement = document.createElement("div");
-  shipElement.className = "ship";
+  shipElement.classList.add("ship", "draggable");
 
   // Adjust the ship's appearance
   shipElement.style.width = ship.length * cellSize + "px";

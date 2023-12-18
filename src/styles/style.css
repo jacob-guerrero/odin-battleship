@@ -47,8 +47,8 @@ h1, h2, h3, p {
 }
 
 .ship {
-  position: absolute;
-  cursor: pointer;
+  /* Change cursor */
+  border: 1px solid #ddd;
 }
 
 .drag-drop {
