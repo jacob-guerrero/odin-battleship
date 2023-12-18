@@ -2,6 +2,7 @@ const Gameboard = require("./gameboard");
 const Player = require("./player");
 const Ship = require("./ship");
 const Doom = require("./doom");
+const DragDrop = require("./dragDrop");
 
 const initializeGame = () => {
   const player1 = Player("Player 1");
@@ -14,6 +15,12 @@ const initializeGame = () => {
   // Samples ships
   player1Gameboard.placeShip(ship1, 0, 0, false);
   player2Gameboard.placeShip(ship2, 2, 2, true);
+
+// Allow Player 1 to drag and drop ships
+DragDrop.enableDragAndDrop(player1Gameboard);
+
+// Computer places ships randomly for Player 2
+//placeShipsRandomly(player2Gameboard);
 
   // Render initial game boards
   Doom.renderGameboard("player1-board", player1Gameboard);

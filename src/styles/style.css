@@ -24,16 +24,35 @@ h1, h2, h3, p {
     text-align: center;
 }
 
-
+/* Gameboard */
 .game-board {
     display: grid;
-    grid-template-columns: repeat(10, 30px); /* Adjust based on your board size */
+    grid-template-columns: repeat(10, 30px); /* Adjust based on the board size */
     grid-gap: 1px;
-    margin: 20px;
-  }
-  .cell {
-    width: 30px;
-    height: 30px;
-    border: 1px solid #ddd;
-    text-align: center;
-  }
+}
+.cell {
+  width: 30px;
+  height: 30px;
+  border: 1px solid #ddd;
+  text-align: center;
+}
+
+.ship {
+  position: absolute;
+  cursor: pointer;
+}
+
+.drag-drop {
+  display: inline-block;
+  min-width: 20px;
+  padding: 2em 0.5em;
+  margin: 0;
+
+  color: #fff;
+  background-color: #29e;
+  border: solid 2px #fff;
+
+  touch-action: none;
+  user-select: none;
+  transform: translate(0px, 0px);
+}
