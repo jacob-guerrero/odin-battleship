@@ -2,6 +2,8 @@ const Ship = require("./ship");
 const interact = require("interactjs");
 
 const cellSize = 30; // Size of each cell
+let xStartCoord = 0;
+let yStartCoord = 0;
 
 const enableDragAndDrop = (gameboard) => {
   const ships = [Ship(2), Ship(4)]; // Add more ships as needed
@@ -9,6 +11,11 @@ const enableDragAndDrop = (gameboard) => {
   ships.forEach((ship) => {
     const shipElement = createShipElement(ship);
     document.body.appendChild(shipElement);
+  });
+
+  const shipsPlaced = document.querySelectorAll(".ship");
+  shipsPlaced.forEach((ship) => {
+    ship.addEventListener('mousedown', getStartCoords);
   });
 };
 
@@ -19,7 +26,6 @@ const createShipElement = (ship) => {
   // Adjust the ship's appearance
   shipElement.style.width = ship.length * cellSize + "px";
   shipElement.style.height = cellSize + "px";
-  shipElement.style.backgroundColor = "gray";
 
   // Add a class to represent the ship's orientation (e.g., "vertical")
   shipElement.classList.add("vertical");
@@ -39,7 +45,7 @@ interact(".draggable").draggable({
   // keep the element within the area of it's parent
   modifiers: [
     interact.modifiers.restrictRect({
-      restriction: "parent",
+      restriction: ".dropzone",
       endOnly: true,
     }),
   ],
@@ -52,17 +58,25 @@ interact(".draggable").draggable({
 
     // call this function on every dragend event
     end(event) {
-      var textEl = event.target.querySelector("p");
+      const dropzoneDiv = document.querySelector('.dropzone');
+      const dropzoneDivRight = dropzoneDiv.getBoundingClientRect().right;
+      const dropzoneDivBottom = dropzoneDiv.getBoundingClientRect().bottom;
+      const draggableRight = event.target.getBoundingClientRect().right;
+      const draggableBottom = event.target.getBoundingClientRect().bottom;
+      
+      const xCoord = +event.target.getBoundingClientRect().x - +dropzoneDiv.getBoundingClientRect().x;
+      const yCoord = +event.target.getBoundingClientRect().y - +dropzoneDiv.getBoundingClientRect().y + (+event.target.getBoundingClientRect().height / 2);
 
-      textEl &&
-        (textEl.textContent =
-          "moved a distance of " +
-          Math.sqrt(
-            (Math.pow(event.pageX - event.x0, 2) +
-              Math.pow(event.pageY - event.y0, 2)) |
-              0
-          ).toFixed(2) +
-          "px");
+      console.log("x: " + Math.floor(yCoord / 30));
+      console.log("y: " + Math.floor(xCoord / 30));
+
+      if ( (draggableRight >= dropzoneDivRight + 30) || (draggableBottom >= dropzoneDivBottom + 15) ) {
+        console.log("its outside!");
+        console.log(xStartCoord, yStartCoord);
+        event.target.style.transform = "translate(" + 0 + "px, " + 0 + "px)";
+        event.target.setAttribute("data-x", "");
+        event.target.setAttribute("data-y", "");
+      }
     },
   },
 });
@@ -84,9 +98,9 @@ function dragMoveListener(event) {
 // enable draggables to be dropped into this
 interact(".dropzone").dropzone({
   // only accept elements matching this CSS selector
-  accept: "#yes-drop",
-  // Require a 90% element overlap for a drop to be possible
-  overlap: 0.9,
+  accept: ["#yes-drop", ".ship"],
+  // Require a 50% element overlap for a drop to be possible
+  overlap: 0.5,
 
   // listen for drop related events:
 
@@ -119,15 +133,6 @@ interact(".dropzone").dropzone({
   },
 });
 
-/* let gridTarget = interact.snappers.grid({
-  // can be a pair of x and y, left and top,
-  // right and bottom, or width, and height
-  x: cellSize,
-  y: cellSize,
-
-  // optional
-  range: cellSize,
-}); */
 interact(".drag-drop").draggable({
   inertia: true,
   modifiers: [
@@ -144,5 +149,11 @@ interact(".drag-drop").draggable({
 
 // this function is used later in the resizing and gesture demos
 window.dragMoveListener = dragMoveListener;
+
+const getStartCoords = (event) => {
+  xStartCoord = +event.target.getBoundingClientRect().x;
+  yStartCoord = +event.target.getBoundingClientRect().y;
+  console.log(xStartCoord, yStartCoord);
+}
 
 module.exports = { enableDragAndDrop, createShipElement };
