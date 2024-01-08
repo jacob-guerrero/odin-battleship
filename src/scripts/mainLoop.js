@@ -107,6 +107,10 @@ const gameLoop = (player1, player2, player1Gameboard, player2Gameboard) => {
 };
 
 
+const updateGameboard = (ship, xCoord, yCoord, isVertical) => {
+  player1Gameboard.placeShip(ship, xCoord, yCoord, isVertical);
+  console.log(player1Gameboard.gameBoard, ship, xCoord, yCoord, isVertical);
+}
 
 
 
@@ -136,22 +140,22 @@ interact(".draggable").draggable({
       const dropzoneDivBottom = dropzoneDiv.getBoundingClientRect().bottom;
       const draggableRight = event.target.getBoundingClientRect().right;
       const draggableBottom = event.target.getBoundingClientRect().bottom;
-      //const player1Gameboard = enableDragAndDrop.gameboard;
       
       const xCoord = +event.target.getBoundingClientRect().x - +dropzoneDiv.getBoundingClientRect().x;
       const yCoord = +event.target.getBoundingClientRect().y - +dropzoneDiv.getBoundingClientRect().y + (+event.target.getBoundingClientRect().height / 2);
 
       console.log("x: " + Math.floor(yCoord / 30));
       console.log("y: " + Math.floor(xCoord / 30));
-      player1Gameboard.placeShip(ships[+event.target.dataset.ship], Math.floor(yCoord / 30), Math.floor(xCoord / 30), false);
-      console.log(player1Gameboard.gameBoard, +event.target.dataset.ship, Math.floor(yCoord / 30), Math.floor(xCoord / 30), false);
-
-      if ( (draggableRight >= dropzoneDivRight + 30) || (draggableBottom >= dropzoneDivBottom + 15) ) {
+      
+      if ( (draggableRight >= dropzoneDivRight + 30) || (draggableBottom >= dropzoneDivBottom + 15) || (Math.floor(yCoord / 30) < 0) || (Math.floor(xCoord / 30) < 0)) {
         console.log("its outside!");
         console.log(xStartCoord, yStartCoord);
         event.target.style.transform = "translate(" + 0 + "px, " + 0 + "px)";
         event.target.setAttribute("data-x", "");
         event.target.setAttribute("data-y", "");
+      }
+      else {
+        updateGameboard(ships[+event.target.dataset.ship], Math.floor(yCoord / 30), Math.floor(xCoord / 30), false);
       }
     },
   },
