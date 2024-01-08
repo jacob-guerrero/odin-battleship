@@ -1,7 +1,5 @@
-const Gameboard = require("./gameboard");
-const Ship = require("./ship");
-
 const cellSize = 30; // Size of each cell
+let idShip = 0;
 //const ships = [Ship(2), Ship(4)]; // Add more ships as needed
 
 const enableDragAndDrop = (gameboard, ships) => {
@@ -9,6 +7,7 @@ const enableDragAndDrop = (gameboard, ships) => {
 
   ships.forEach((ship) => {
     const shipElement = createShipElement(ship);
+    idShip += 1;
     document.body.appendChild(shipElement);
   });
 };
@@ -16,6 +15,7 @@ const enableDragAndDrop = (gameboard, ships) => {
 const createShipElement = (ship) => {
   const shipElement = document.createElement("div");
   shipElement.classList.add("ship", "draggable");
+  shipElement.dataset.ship = idShip;
 
   // Adjust the ship's appearance
   shipElement.style.width = ship.length * cellSize - 8 + "px";

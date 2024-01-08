@@ -143,6 +143,8 @@ interact(".draggable").draggable({
 
       console.log("x: " + Math.floor(yCoord / 30));
       console.log("y: " + Math.floor(xCoord / 30));
+      player1Gameboard.placeShip(ships[+event.target.dataset.ship], Math.floor(yCoord / 30), Math.floor(xCoord / 30), false);
+      console.log(player1Gameboard.gameBoard, +event.target.dataset.ship, Math.floor(yCoord / 30), Math.floor(xCoord / 30), false);
 
       if ( (draggableRight >= dropzoneDivRight + 30) || (draggableBottom >= dropzoneDivBottom + 15) ) {
         console.log("its outside!");
