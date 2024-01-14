@@ -50,6 +50,7 @@ const Gameboard = () => {
       return ship.coordinates;
     } else {
       // console.log("Cannot place ship, overlapping with another ship");
+      return overlapping;
     }
   };
 

@@ -108,8 +108,24 @@ const gameLoop = (player1, player2, player1Gameboard, player2Gameboard) => {
 
 
 const updateGameboard = (ship, xCoord, yCoord, isVertical) => {
-  player1Gameboard.placeShip(ship, xCoord, yCoord, isVertical);
+  const isOverlapping = player1Gameboard.placeShip(ship, xCoord, yCoord, isVertical);
   console.log(player1Gameboard.gameBoard, ship, xCoord, yCoord, isVertical);
+
+  for (let i = 0; i < ship.length; i++) {
+    if (!isVertical) {
+      const cellToUpdate = document.querySelector(
+        `#player1-board [data-x="${xCoord}"][data-y="${yCoord + i}"]`
+      );
+      Doom.updateCellValue(cellToUpdate, player1Gameboard.gameBoard[xCoord][yCoord + i]);
+    } else {
+      const cellToUpdate = document.querySelector(
+        `#player1-board [data-x="${xCoord + i}"][data-y="${yCoord}"]`
+      );
+      Doom.updateCellValue(cellToUpdate, player1Gameboard.gameBoard[xCoord + i][yCoord]);
+    }
+  }
+  
+  return isOverlapping;
 }
 
 
@@ -155,7 +171,14 @@ interact(".draggable").draggable({
         event.target.setAttribute("data-y", "");
       }
       else {
-        updateGameboard(ships[+event.target.dataset.ship], Math.floor(yCoord / 30), Math.floor(xCoord / 30), false);
+        const isOverlapping = updateGameboard(ships[+event.target.dataset.ship], Math.floor(yCoord / 30), Math.floor(xCoord / 30), false);
+
+        if (isOverlapping === true) {
+          console.log("its overlapping!");
+          event.target.style.transform = "translate(" + 0 + "px, " + 0 + "px)";
+          event.target.setAttribute("data-x", "");
+          event.target.setAttribute("data-y", "");
+        }
       }
     },
   },
