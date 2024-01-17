@@ -180,7 +180,7 @@ interact(".draggable").draggable({
       console.log("x: " + Math.floor(yCoord / 30));
       console.log("y: " + Math.floor(xCoord / 30));
       
-      if ( (draggableRight >= dropzoneDivRight + 30) || (draggableBottom >= dropzoneDivBottom + 15) || (Math.floor(yCoord / 30) < 0) || (Math.floor(xCoord / 30) < 0)) {
+      if ( (draggableRight >= dropzoneDivRight + 30) || (draggableBottom >= dropzoneDivBottom + 15) || (Math.floor(yCoord / 30) < 0) || (Math.floor(xCoord / 30) < 0) ) {
         console.log("its outside!");
         console.log(xStartCoord, yStartCoord);
         event.target.style.transform = "translate(" + 0 + "px, " + 0 + "px)";
@@ -189,7 +189,7 @@ interact(".draggable").draggable({
 
         if(event.target.classList.contains("isPlaced")) {
           event.target.classList.remove("isPlaced");
-
+          
           const ship = ships[+event.target.dataset.ship];
           const isVertical = !event.target.classList.contains("horizontal");
           const xCoordPlaced = event.target.dataset.xplaced;
@@ -198,12 +198,14 @@ interact(".draggable").draggable({
           // Remove prev coords
           removePrevCoords(ship, +xCoordPlaced, +yCoordPlaced, isVertical);
           
+          event.target.classList.add("horizontal");
           event.target.setAttribute("data-xPlaced", "");
           event.target.setAttribute("data-yPlaced", "");
         }
       }
       else {
-        const isOverlapping = updateGameboard(ships[+event.target.dataset.ship], Math.floor(yCoord / 30), Math.floor(xCoord / 30), false);
+        const isVertical = !event.target.classList.contains("horizontal");
+        const isOverlapping = updateGameboard(ships[+event.target.dataset.ship], Math.floor(yCoord / 30), Math.floor(xCoord / 30), isVertical);
 
         if (isOverlapping === true) {
           console.log("its overlapping!");
@@ -222,6 +224,7 @@ interact(".draggable").draggable({
             // Remove prev coords
             removePrevCoords(ship, +xCoordPlaced, +yCoordPlaced, isVertical);
             
+            event.target.classList.add("horizontal");
             event.target.setAttribute("data-xPlaced", "");
             event.target.setAttribute("data-yPlaced", "");
           }
@@ -329,6 +332,32 @@ window.dragMoveListener = dragMoveListener;
   console.log(xStartCoord, yStartCoord);
 } */
 
+
+
+/* Tap ships */
+interact('.ship')
+  .on('tap', function (event) {
+    const dropzoneDiv = document.querySelector('.dropzone');
+
+    const xCoord = +event.target.getBoundingClientRect().x - +dropzoneDiv.getBoundingClientRect().x;
+    const yCoord = +event.target.getBoundingClientRect().y - +dropzoneDiv.getBoundingClientRect().y + (+event.target.getBoundingClientRect().height / 2);
+
+    if ( event.target.classList.contains("isPlaced") ) {
+      const ship = ships[+event.target.dataset.ship];
+      const isVertical = !event.target.classList.contains("horizontal");
+      
+      const xCoordPlaced = +event.target.dataset.xplaced;
+      const yCoordPlaced = +event.target.dataset.yplaced;
+      
+          // Remove prev coords and update gameboard
+          removePrevCoords(ship, xCoordPlaced, yCoordPlaced, isVertical);
+          event.currentTarget.classList.toggle('horizontal');
+          updateGameboard(ship, Math.floor(yCoord / 30), Math.floor(xCoord / 30), !isVertical);
+       
+    }
+
+    event.preventDefault();
+  })
 
 
 
