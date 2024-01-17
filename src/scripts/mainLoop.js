@@ -334,7 +334,8 @@ window.dragMoveListener = dragMoveListener;
 
 
 
-/* Tap ships */
+/* on tap ships */
+
 interact('.ship')
   .on('tap', function (event) {
     const dropzoneDiv = document.querySelector('.dropzone');
@@ -349,11 +350,14 @@ interact('.ship')
       const xCoordPlaced = +event.target.dataset.xplaced;
       const yCoordPlaced = +event.target.dataset.yplaced;
       
+      // Check if ship will be inside gameboard
+      if ( (xCoordPlaced + ship.length <= 10) && (yCoordPlaced + ship.length <= 10) ) {
           // Remove prev coords and update gameboard
           removePrevCoords(ship, xCoordPlaced, yCoordPlaced, isVertical);
           event.currentTarget.classList.toggle('horizontal');
           updateGameboard(ship, Math.floor(yCoord / 30), Math.floor(xCoord / 30), !isVertical);
-       
+        
+      }
     }
 
     event.preventDefault();
