@@ -128,6 +128,23 @@ const updateGameboard = (ship, xCoord, yCoord, isVertical) => {
   return isOverlapping;
 }
 
+const removePrevCoords = (ship, xCoord, yCoord, isVertical) => {
+  for (let i = 0; i < ship.length; i++) {
+    if (!isVertical) {
+      player1Gameboard.gameBoard[xCoord][yCoord + i] = 0;
+      const cellToUpdate = document.querySelector(
+        `#player1-board [data-x="${xCoord}"][data-y="${yCoord + i}"]`
+      );
+      Doom.updateCellValue(cellToUpdate, player1Gameboard.gameBoard[xCoord][yCoord + i])
+    } else {
+      player1Gameboard.gameBoard[xCoord + i][yCoord] = 0;
+      const cellToUpdate = document.querySelector(
+        `#player1-board [data-x="${xCoord + i}"][data-y="${yCoord}"]`
+      );
+      Doom.updateCellValue(cellToUpdate, player1Gameboard.gameBoard[xCoord + i][yCoord])
+    }
+  }
+}
 
 
 
@@ -178,7 +195,29 @@ interact(".draggable").draggable({
           event.target.style.transform = "translate(" + 0 + "px, " + 0 + "px)";
           event.target.setAttribute("data-x", "");
           event.target.setAttribute("data-y", "");
+          
+        } else {
+          
+          event.target.classList.add("isPlaced");
         }
+        if (event.target.classList.contains("isPlaced") && event.target.dataset.xplaced) {
+          const ship = ships[+event.target.dataset.ship];
+          const isVertical = !event.target.classList.contains("horizontal");
+          const xCoordPlaced = event.target.dataset.xplaced;
+          const yCoordPlaced = event.target.dataset.yplaced;
+          
+          // Remove prev coords
+          removePrevCoords(ship, +xCoordPlaced, +yCoordPlaced, isVertical);
+          console.log("Removed!", +isVertical, +xCoordPlaced, yCoordPlaced)
+        }
+      }
+
+      // Placing ship
+      if(event.target.classList.contains("isPlaced")) {
+        //event.target.classList.add("isPlaced");
+        event.target.setAttribute("data-xPlaced", Math.floor(yCoord / 30));
+        event.target.setAttribute("data-yPlaced", Math.floor(xCoord / 30));
+        
       }
     },
   },

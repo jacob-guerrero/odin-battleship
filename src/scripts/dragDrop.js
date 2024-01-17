@@ -22,12 +22,12 @@ const createShipElement = (ship) => {
   shipElement.style.height = cellSize - 4 + "px";
 
   // Add a class to represent the ship's orientation (e.g., "vertical")
-  shipElement.classList.add("vertical");
+  shipElement.classList.add("horizontal");
 
   // Handle orientation toggle on click
-  shipElement.addEventListener("click", () => {
-    shipElement.classList.toggle("vertical");
-  });
+  /* shipElement.addEventListener("click", () => {
+    shipElement.classList.toggle("horizontal");
+  }); */
 
   return shipElement;
 };
