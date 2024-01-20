@@ -9,6 +9,7 @@ const interact = require("interactjs");
 const player1Gameboard = Gameboard();
 const player2Gameboard = Gameboard();
 
+const cellSize = 30; // Size of each cell
 let xStartCoord = 0;
 let yStartCoord = 0;
 const ships = [Ship(5), Ship(4), Ship(3), Ship(3), Ship(2)]; // Add more ships as needed
@@ -175,12 +176,12 @@ interact(".draggable").draggable({
       const draggableBottom = event.target.getBoundingClientRect().bottom;
       
       const xCoord = +event.target.getBoundingClientRect().x - +dropzoneDiv.getBoundingClientRect().x;
-      const yCoord = +event.target.getBoundingClientRect().y - +dropzoneDiv.getBoundingClientRect().y + (+event.target.getBoundingClientRect().height / 2);
+      const yCoord = +event.target.getBoundingClientRect().y - +dropzoneDiv.getBoundingClientRect().y + (cellSize / 2);
 
-      console.log("x: " + Math.floor(yCoord / 30));
-      console.log("y: " + Math.floor(xCoord / 30));
+      console.log("x: " + Math.floor(yCoord / cellSize));
+      console.log("y: " + Math.floor(xCoord / cellSize));
       
-      if ( (draggableRight >= dropzoneDivRight + 30) || (draggableBottom >= dropzoneDivBottom + 15) || (Math.floor(yCoord / 30) < 0) || (Math.floor(xCoord / 30) < 0) ) {
+      if ( (draggableRight >= dropzoneDivRight + cellSize) || (draggableBottom >= dropzoneDivBottom + 15) || (Math.floor(yCoord / cellSize) < 0) || (Math.floor(xCoord / cellSize) < 0) ) {
         console.log("its outside!");
         console.log(xStartCoord, yStartCoord);
         event.target.style.transform = "translate(" + 0 + "px, " + 0 + "px)";
@@ -205,7 +206,7 @@ interact(".draggable").draggable({
       }
       else {
         const isVertical = !event.target.classList.contains("horizontal");
-        const isOverlapping = updateGameboard(ships[+event.target.dataset.ship], Math.floor(yCoord / 30), Math.floor(xCoord / 30), isVertical);
+        const isOverlapping = updateGameboard(ships[+event.target.dataset.ship], Math.floor(yCoord / cellSize), Math.floor(xCoord / cellSize), isVertical);
 
         if (isOverlapping === true) {
           console.log("its overlapping!");
@@ -248,8 +249,8 @@ interact(".draggable").draggable({
       // Placing ship
       if(event.target.classList.contains("isPlaced")) {
         //event.target.classList.add("isPlaced");
-        event.target.setAttribute("data-xPlaced", Math.floor(yCoord / 30));
-        event.target.setAttribute("data-yPlaced", Math.floor(xCoord / 30));
+        event.target.setAttribute("data-xPlaced", Math.floor(yCoord / cellSize));
+        event.target.setAttribute("data-yPlaced", Math.floor(xCoord / cellSize));
         
       }
     },
@@ -352,7 +353,7 @@ interact('.ship')
     const dropzoneDiv = document.querySelector('.dropzone');
 
     const xCoord = +event.target.getBoundingClientRect().x - +dropzoneDiv.getBoundingClientRect().x;
-    const yCoord = +event.target.getBoundingClientRect().y - +dropzoneDiv.getBoundingClientRect().y + (+event.target.getBoundingClientRect().height / 2);
+    const yCoord = +event.target.getBoundingClientRect().y - +dropzoneDiv.getBoundingClientRect().y + (cellSize / 2);
 
     if ( event.target.classList.contains("isPlaced") ) {
       const ship = ships[+event.target.dataset.ship];
@@ -365,10 +366,17 @@ interact('.ship')
       if ( (xCoordPlaced + ship.length <= 10) && (yCoordPlaced + ship.length <= 10) ) {
         // Check if ship will not be overlapping
         if (!checkShips(player1Gameboard, xCoordPlaced, yCoordPlaced, ship, isVertical)) {
+          //Change ship direction
+          const length = ship.length * cellSize - 8;
+          const size = cellSize - 4;
+
+          event.currentTarget.style.width = isVertical ? `${length}px` : `${size}px`;
+          event.currentTarget.style.height = isVertical ? `${size}px` : `${length}px`;
+
           // Remove prev coords and update gameboard
           removePrevCoords(ship, xCoordPlaced, yCoordPlaced, isVertical);
           event.currentTarget.classList.toggle('horizontal');
-          updateGameboard(ship, Math.floor(yCoord / 30), Math.floor(xCoord / 30), !isVertical);
+          updateGameboard(ship, Math.floor(yCoord / cellSize), Math.floor(xCoord / cellSize), !isVertical);
         }
       }
     }

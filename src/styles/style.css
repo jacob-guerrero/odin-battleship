@@ -35,6 +35,9 @@ h1, h2, h3, p {
   gap: 30px;
   max-width: 800px;
 }
+.ship-container {
+  position: relative;
+}
 
 /* Gameboard */
 .game-board {
