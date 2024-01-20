@@ -182,12 +182,16 @@ interact(".draggable").draggable({
       console.log("y: " + Math.floor(xCoord / cellSize));
       
       if ( (draggableRight >= dropzoneDivRight + cellSize) || (draggableBottom >= dropzoneDivBottom + 15) || (Math.floor(yCoord / cellSize) < 0) || (Math.floor(xCoord / cellSize) < 0) ) {
+        //Restart ship position when its outside
         console.log("its outside!");
         console.log(xStartCoord, yStartCoord);
         event.target.style.transform = "translate(" + 0 + "px, " + 0 + "px)";
         event.target.setAttribute("data-x", "");
         event.target.setAttribute("data-y", "");
+        event.target.style.width = ships[+event.target.dataset.ship].length * cellSize - 8 + "px";
+        event.target.style.height = cellSize - 4 + "px";
 
+        //Restart ship properties when its placed
         if(event.target.classList.contains("isPlaced")) {
           event.target.classList.remove("isPlaced");
           
@@ -209,11 +213,15 @@ interact(".draggable").draggable({
         const isOverlapping = updateGameboard(ships[+event.target.dataset.ship], Math.floor(yCoord / cellSize), Math.floor(xCoord / cellSize), isVertical);
 
         if (isOverlapping === true) {
+          //Restart ship position when its overlapping
           console.log("its overlapping!");
           event.target.style.transform = "translate(" + 0 + "px, " + 0 + "px)";
           event.target.setAttribute("data-x", "");
           event.target.setAttribute("data-y", "");
+          event.target.style.width = ships[+event.target.dataset.ship].length * cellSize - 8 + "px";
+          event.target.style.height = cellSize - 4 + "px";
 
+          //Restart ship properties when its overlapping and placed
           if(event.target.classList.contains("isPlaced")) {
             event.target.classList.remove("isPlaced");
   
@@ -229,9 +237,8 @@ interact(".draggable").draggable({
             event.target.setAttribute("data-xPlaced", "");
             event.target.setAttribute("data-yPlaced", "");
           }
-          
-        } else {
-          
+        } 
+        else {
           event.target.classList.add("isPlaced");
         }
         if (event.target.classList.contains("isPlaced") && event.target.dataset.xplaced) {
@@ -248,10 +255,8 @@ interact(".draggable").draggable({
 
       // Placing ship
       if(event.target.classList.contains("isPlaced")) {
-        //event.target.classList.add("isPlaced");
         event.target.setAttribute("data-xPlaced", Math.floor(yCoord / cellSize));
         event.target.setAttribute("data-yPlaced", Math.floor(xCoord / cellSize));
-        
       }
     },
   },
