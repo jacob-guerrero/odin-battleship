@@ -18,7 +18,7 @@ const createShipElement = (ship) => {
   shipElement.dataset.ship = idShip;
 
   // Adjust the ship's appearance
-  shipElement.style.width = ship.length * cellSize - 8 + "px";
+  shipElement.style.width = ship.length * cellSize - 6 + "px";
   shipElement.style.height = cellSize - 4 + "px";
   shipElement.style.position = "absolute";
   shipElement.style.top = idShip * (cellSize - 4) + "px";

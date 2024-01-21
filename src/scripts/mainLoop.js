@@ -175,7 +175,7 @@ interact(".draggable").draggable({
       const draggableRight = event.target.getBoundingClientRect().right;
       const draggableBottom = event.target.getBoundingClientRect().bottom;
       
-      const xCoord = +event.target.getBoundingClientRect().x - +dropzoneDiv.getBoundingClientRect().x;
+      const xCoord = +event.target.getBoundingClientRect().x - +dropzoneDiv.getBoundingClientRect().x + (cellSize / 2);
       const yCoord = +event.target.getBoundingClientRect().y - +dropzoneDiv.getBoundingClientRect().y + (cellSize / 2);
 
       console.log("x: " + Math.floor(yCoord / cellSize));
@@ -188,7 +188,7 @@ interact(".draggable").draggable({
         event.target.style.transform = "translate(" + 0 + "px, " + 0 + "px)";
         event.target.setAttribute("data-x", "");
         event.target.setAttribute("data-y", "");
-        event.target.style.width = ships[+event.target.dataset.ship].length * cellSize - 8 + "px";
+        event.target.style.width = ships[+event.target.dataset.ship].length * cellSize - 6 + "px";
         event.target.style.height = cellSize - 4 + "px";
 
         //Restart ship properties when its placed
@@ -218,7 +218,7 @@ interact(".draggable").draggable({
           event.target.style.transform = "translate(" + 0 + "px, " + 0 + "px)";
           event.target.setAttribute("data-x", "");
           event.target.setAttribute("data-y", "");
-          event.target.style.width = ships[+event.target.dataset.ship].length * cellSize - 8 + "px";
+          event.target.style.width = ships[+event.target.dataset.ship].length * cellSize - 6 + "px";
           event.target.style.height = cellSize - 4 + "px";
 
           //Restart ship properties when its overlapping and placed
@@ -262,11 +262,33 @@ interact(".draggable").draggable({
   },
 });
 
+
+function shipPlacedChecker(target) {
+  const shipTarget = target.getBoundingClientRect();
+  const allPlacedShips = Array.from(document.querySelectorAll('.isPlaced'))
+      .filter(ship => ship !== target)
+      .map(ship => ship.getBoundingClientRect());
+
+  // Check if the target's rectangle doesn't overlap with any other rectangle
+  return allPlacedShips.some(ship => (
+      shipTarget.right > ship.left &&
+      shipTarget.left < ship.right &&
+      shipTarget.bottom > ship.top &&
+      shipTarget.top < ship.bottom
+  ));
+}
+
 function dragMoveListener(event) {
   var target = event.target;
   // keep the dragged position in the data-x/data-y attributes
   var x = (parseFloat(target.getAttribute("data-x")) || 0) + event.dx;
   var y = (parseFloat(target.getAttribute("data-y")) || 0) + event.dy;
+
+  if (shipPlacedChecker(target)) {
+    target.classList.add("overlapping");
+  } else {
+    target.classList.remove("overlapping");
+  }
 
   // translate the element
   target.style.transform = "translate(" + x + "px, " + y + "px)";
@@ -279,7 +301,7 @@ function dragMoveListener(event) {
 // enable draggables to be dropped into this
 interact(".dropzone").dropzone({
   // only accept elements matching this CSS selector
-  accept: ["#yes-drop", ".ship"],
+  accept: [".ship"],
   // Require a 80% element overlap for a drop to be possible
   overlap: 0.80,
 
@@ -296,16 +318,18 @@ interact(".dropzone").dropzone({
     // feedback the possibility of a drop
     dropzoneElement.classList.add("drop-target");
     draggableElement.classList.add("can-drop");
-    draggableElement.textContent = "Dragged in";
+    //draggableElement.textContent = "Dragged in";
   },
   ondragleave: function (event) {
     // remove the drop feedback style
     event.target.classList.remove("drop-target");
     event.relatedTarget.classList.remove("can-drop");
-    event.relatedTarget.textContent = "Dragged out";
+    //event.relatedTarget.textContent = "Dragged out";
   },
   ondrop: function (event) {
-    event.relatedTarget.textContent = "Dropped";
+    //event.relatedTarget.textContent = "Dropped";
+    event.relatedTarget.classList.remove("can-drop");
+    event.relatedTarget.classList.remove("overlapping");
   },
   ondropdeactivate: function (event) {
     // remove active dropzone feedback
@@ -357,7 +381,7 @@ interact('.ship')
   .on('tap', function (event) {
     const dropzoneDiv = document.querySelector('.dropzone');
 
-    const xCoord = +event.target.getBoundingClientRect().x - +dropzoneDiv.getBoundingClientRect().x;
+    const xCoord = +event.target.getBoundingClientRect().x - +dropzoneDiv.getBoundingClientRect().x + (cellSize / 2);
     const yCoord = +event.target.getBoundingClientRect().y - +dropzoneDiv.getBoundingClientRect().y + (cellSize / 2);
 
     if ( event.target.classList.contains("isPlaced") ) {
@@ -372,7 +396,7 @@ interact('.ship')
         // Check if ship will not be overlapping
         if (!checkShips(player1Gameboard, xCoordPlaced, yCoordPlaced, ship, isVertical)) {
           //Change ship direction
-          const length = ship.length * cellSize - 8;
+          const length = ship.length * cellSize - 6;
           const size = cellSize - 4;
 
           event.currentTarget.style.width = isVertical ? `${length}px` : `${size}px`;
