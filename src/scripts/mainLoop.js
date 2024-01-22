@@ -180,8 +180,12 @@ interact(".draggable").draggable({
 
       console.log("x: " + Math.floor(yCoord / cellSize));
       console.log("y: " + Math.floor(xCoord / cellSize));
+      console.log(draggableRight, dropzoneDivRight + (cellSize/2))
+
+      const isVertical = !event.target.classList.contains("horizontal");
       
-      if ( (draggableRight >= dropzoneDivRight + cellSize) || (draggableBottom >= dropzoneDivBottom + 15) || (Math.floor(yCoord / cellSize) < 0) || (Math.floor(xCoord / cellSize) < 0) ) {
+      if ( (draggableRight >= dropzoneDivRight + (cellSize/2)) || (draggableBottom >= dropzoneDivBottom + (cellSize/2)) || (Math.floor(yCoord / cellSize) < 0) || (Math.floor(xCoord / cellSize) < 0) || (isVertical && ((draggableRight >= dropzoneDivRight + (cellSize/2)-6))) || (isVertical && ((draggableBottom >= dropzoneDivBottom + (cellSize/2)-6)))) {
+
         //Restart ship position when its outside
         console.log("its outside!");
         console.log(xStartCoord, yStartCoord);
@@ -407,6 +411,28 @@ interact('.ship')
           event.currentTarget.classList.toggle('horizontal');
           updateGameboard(ship, Math.floor(yCoord / cellSize), Math.floor(xCoord / cellSize), !isVertical);
         }
+        else {
+          event.currentTarget.classList.add('overlapping');
+          
+          setTimeout(() => {
+            event.currentTarget.classList.add('overlapping-fade');
+            setTimeout(() => {
+              event.currentTarget.classList.remove('overlapping');
+              event.currentTarget.classList.remove('overlapping-fade');
+            }, 400);
+          }, 200)
+        }
+      }
+      else {
+        event.currentTarget.classList.add('overlapping');
+        
+        setTimeout(() => {
+          event.currentTarget.classList.add('overlapping-fade');
+          setTimeout(() => {
+            event.currentTarget.classList.remove('overlapping');
+            event.currentTarget.classList.remove('overlapping-fade');
+          }, 400);
+        }, 200)
       }
     }
 

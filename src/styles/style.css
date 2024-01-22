@@ -82,3 +82,8 @@ h1, h2, h3, p {
   background-color: #ff4545;
   border: solid 2px #fff;
 }
+.overlapping-fade {
+  border: 2px solid #ddd;
+  background-color: gray;
+  transition: background-color 0.4s ease-out;
+}
