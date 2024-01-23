@@ -265,6 +265,17 @@ interact(".draggable").draggable({
       if(event.target.classList.contains("isPlaced")) {
         event.target.setAttribute("data-xPlaced", Math.floor(yCoord / cellSize));
         event.target.setAttribute("data-yPlaced", Math.floor(xCoord / cellSize));
+                
+        const ship = +event.target.dataset.ship;
+        const xTranslate = Math.floor(xCoord / cellSize) * cellSize + 2; // +2px: borders
+        const yTranslate = (Math.floor(yCoord / cellSize) * cellSize) - dropzoneDivBottom + 60 - (ship*cellSize) + 4 + (ship*4); // +60px: distance between ship container to board, +4px: borders, +ship*cellSize: size of other ships, +ship*4: other ships borders 
+        
+        // translate the element
+        event.target.style.transform = "translate(" + xTranslate + "px, " + yTranslate + "px)";
+
+        // update the posiion attributes
+        event.target.setAttribute("data-x", xTranslate);
+        event.target.setAttribute("data-y", yTranslate); 
       }
     },
   },
