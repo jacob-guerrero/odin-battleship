@@ -152,7 +152,11 @@ const removePrevCoords = (ship, xCoord, yCoord, isVertical) => {
 // target elements with the "draggable" class
 interact(".draggable").draggable({
   // enable inertial throwing
-  inertia: true,
+  inertia: {
+    resistance: 50,       // Lower resistance for slower speed
+    minSpeed: 200, // Adjust the maximum speed
+    endSpeed: 100,           // Adjust the minimum speed
+  },
   // keep the element within the area of it's parent
   modifiers: [
     interact.modifiers.restrictRect({
@@ -180,7 +184,7 @@ interact(".draggable").draggable({
 
       console.log("x: " + Math.floor(yCoord / cellSize));
       console.log("y: " + Math.floor(xCoord / cellSize));
-      console.log(draggableRight, dropzoneDivRight + (cellSize/2))
+      console.log(xCoord, yCoord)
 
       const isVertical = !event.target.classList.contains("horizontal");
       

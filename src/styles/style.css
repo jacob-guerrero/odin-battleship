@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Roboto+Mono&display=swap');
+
 html {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
@@ -11,38 +13,76 @@ html {
   box-sizing: inherit;
 }
 html, body {
-    margin: 0;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    width: 100%;
-    height: 100%;
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-rows: max-content 1fr;
+  grid-template-columns: 1fr;
 }
 .game-board, .cell {
   box-sizing: border-box;
 }
 h1, h2, h3, p {
-    margin: 0;
+  margin: 0;
 }
 
 .main-title {
-    text-align: center;
+  font-family: 'Press Start 2P', sans-serif, system-ui;
+  padding: 30px;
+  text-align: center;
 }
 
 .container {
   display: grid;
-  grid-template-columns: repeat(2, 1fr); /* Adjust based on the board size */
-  justify-items: center;
-  margin: 30px;
-  gap: 30px;
+  grid-template-columns: minmax(0px, 30px) 300px minmax(30px, 90px) 300px minmax(0px, 30px); /* Adjust based on the board size */
+  grid-template-rows: 1fr 180px;
+  margin: 0 30px;
   max-width: 800px;
+  height: max-content;
+  justify-self: center;
+}
+#player1-board {
+  grid-column: 2;
+}
+#player2-board {
+  grid-column-start: 4;
 }
 .ship-container {
+  grid-row-start: 2;
+  grid-column-start: 2;
+  display: grid;
+  grid-template-columns: minmax(0px, 30px) 1fr;
   position: relative;
+  max-width: 800px;
+  height: auto;
+  margin-top: 30px;
+}
+.instructions-container {
+  grid-row-start: 2;
+  grid-column-start: 4;
+}
+.instructions-title {
+  margin: 8px 0;
+  font-family: 'Press Start 2P', sans-serif, system-ui;
+  font-size: 1.2rem;
+  text-align: center;
+}
+.instructions-text {
+  list-style-type: square;
+  margin: 0;
+  padding: 0 0 0 1.4rem;
+}
+.instructions-text li {
+  font-family: monospace, sans-serif, system-ui;
+  font-size: 1.1rem;
 }
 
 /* Gameboard */
 .game-board {
-    display: grid;
-    grid-template-columns: repeat(10, 30px); /* Adjust based on the board size */
+  display: grid;
+  grid-template-columns: repeat(10, 30px); /* Adjust based on the board size */
 }
 .cell {
   width: 30px;
