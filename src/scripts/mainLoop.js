@@ -188,7 +188,7 @@ interact(".draggable").draggable({
 
       const isVertical = !event.target.classList.contains("horizontal");
       
-      if ( (draggableRight >= dropzoneDivRight + (cellSize/2)) || (draggableBottom >= dropzoneDivBottom + (cellSize/2)) || (Math.floor(yCoord / cellSize) < 0) || (Math.floor(xCoord / cellSize) < 0) || (isVertical && ((draggableRight >= dropzoneDivRight + (cellSize/2)-6))) || (isVertical && ((draggableBottom >= dropzoneDivBottom + (cellSize/2)-6)))) {
+      if ( (draggableRight >= dropzoneDivRight + (cellSize/2)) || (draggableBottom >= dropzoneDivBottom + (cellSize/2)) || (Math.floor(yCoord / cellSize) < 0) || (Math.floor(xCoord / cellSize) < 0) || (isVertical && ((draggableRight >= dropzoneDivRight + (cellSize/2)-6))) || (isVertical && ((draggableBottom >= dropzoneDivBottom + (cellSize/2)-6))) ) {
 
         //Restart ship position when its outside
         console.log("its outside!");
@@ -196,7 +196,7 @@ interact(".draggable").draggable({
         event.target.style.transform = "translate(" + 0 + "px, " + 0 + "px)";
         event.target.setAttribute("data-x", "");
         event.target.setAttribute("data-y", "");
-        event.target.style.width = ships[+event.target.dataset.ship].length * cellSize - 6 + "px";
+        event.target.style.width = ships[+event.target.dataset.ship].length * cellSize - 4 + "px";
         event.target.style.height = cellSize - 4 + "px";
 
         //Restart ship properties when its placed
@@ -226,7 +226,7 @@ interact(".draggable").draggable({
           event.target.style.transform = "translate(" + 0 + "px, " + 0 + "px)";
           event.target.setAttribute("data-x", "");
           event.target.setAttribute("data-y", "");
-          event.target.style.width = ships[+event.target.dataset.ship].length * cellSize - 6 + "px";
+          event.target.style.width = ships[+event.target.dataset.ship].length * cellSize - 4 + "px";
           event.target.style.height = cellSize - 4 + "px";
 
           //Restart ship properties when its overlapping and placed
@@ -268,7 +268,7 @@ interact(".draggable").draggable({
                 
         const ship = +event.target.dataset.ship;
         const xTranslate = Math.floor(xCoord / cellSize) * cellSize + 2; // +2px: borders
-        const yTranslate = (Math.floor(yCoord / cellSize) * cellSize) - dropzoneDivBottom + 60 - (ship*cellSize) + 4 + (ship*4); // +60px: distance between ship container to board, +4px: borders, +ship*cellSize: size of other ships, +ship*4: other ships borders 
+        const yTranslate = (Math.floor(yCoord / cellSize) * cellSize) - dropzoneDivBottom + 60 - (ship*cellSize) + 4 + (ship*4); // +60px: distance between ship-container to board, +4px: borders, +ship*cellSize: size of other ships, +ship*4: other ships borders 
         
         // translate the element
         event.target.style.transform = "translate(" + xTranslate + "px, " + yTranslate + "px)";
@@ -415,7 +415,7 @@ interact('.ship')
         // Check if ship will not be overlapping
         if (!checkShips(player1Gameboard, xCoordPlaced, yCoordPlaced, ship, isVertical)) {
           //Change ship direction
-          const length = ship.length * cellSize - 6;
+          const length = ship.length * cellSize - 4;
           const size = cellSize - 4;
 
           event.currentTarget.style.width = isVertical ? `${length}px` : `${size}px`;
