@@ -277,6 +277,17 @@ interact(".draggable").draggable({
         event.target.setAttribute("data-x", xTranslate);
         event.target.setAttribute("data-y", yTranslate); 
       }
+
+      /* All ships placed */
+      const numShips = document.querySelectorAll(".isPlaced").length;
+      const btn = document.querySelector(".button");
+      console.log(numShips)
+      if (numShips === 5) {
+        console.log("All ships placed")
+        btn.classList.add("btn-active");
+      } else {
+        btn.classList.remove("btn-active");
+      }
     },
   },
 });
