@@ -24,12 +24,12 @@ const initializeGame = () => {
   player1Gameboard.placeShip(ship1, 0, 0, false);
   player2Gameboard.placeShip(ship2, 2, 2, true);
 
-// Allow Player 1 to drag and drop ships
-console.log(player1Gameboard.gameBoard);
-DragDrop.enableDragAndDrop(player1Gameboard, ships);
+  // Allow Player 1 to drag and drop ships
+  console.log(player1Gameboard.gameBoard);
+  DragDrop.enableDragAndDrop(player1Gameboard, ships);
 
-// Computer places ships randomly for Player 2
-//placeShipsRandomly(player2Gameboard);
+  // Computer places ships randomly for Player 2
+  //placeShipsRandomly(player2Gameboard);
 
   // Render initial game boards
   Doom.renderGameboard("player1-board", player1Gameboard);
@@ -148,6 +148,37 @@ const removePrevCoords = (ship, xCoord, yCoord, isVertical) => {
 }
 
 
+/* Start game */
+const handleClick = () => {
+  console.log("Clicked");
+  const shipContainer = document.querySelector(".ship-container");
+  const btn = document.querySelector(".button");
+  const player2Board = document.querySelector("#player2-board");
+  const instructionsDiv = document.querySelector(".instructions-container");
+
+  shipContainer.classList.add("hidden");
+  btn.classList.add("hidden");
+  instructionsDiv.classList.add("hidden");
+  player2Board.classList.remove("hidden");
+};
+
+const checkAllShipsPlaced = () => {
+  const numShips = document.querySelectorAll(".isPlaced").length;
+  const btn = document.querySelector(".button");
+  console.log(numShips)
+  
+  if (numShips === 5) {
+    console.log("All ships placed")
+    btn.classList.add("btn-active");
+    
+    btn.addEventListener("click", handleClick);
+  } else {
+    btn.classList.remove("btn-active");
+
+    btn.removeEventListener("click", handleClick);
+  }
+}
+
 
 // target elements with the "draggable" class
 interact(".draggable").draggable({
@@ -188,7 +219,7 @@ interact(".draggable").draggable({
 
       const isVertical = !event.target.classList.contains("horizontal");
       
-      if ( (draggableRight >= dropzoneDivRight + (cellSize/2)) || (draggableBottom >= dropzoneDivBottom + (cellSize/2)) || (Math.floor(yCoord / cellSize) < 0) || (Math.floor(xCoord / cellSize) < 0) || (isVertical && ((draggableRight >= dropzoneDivRight + (cellSize/2)-6))) || (isVertical && ((draggableBottom >= dropzoneDivBottom + (cellSize/2)-6))) ) {
+      if ( (draggableRight >= dropzoneDivRight + (cellSize/2)-4) || (draggableBottom >= dropzoneDivBottom + (cellSize/2)-4) || (Math.floor(yCoord / cellSize) < 0) || (Math.floor(xCoord / cellSize) < 0) || (isVertical && ((draggableRight >= dropzoneDivRight + (cellSize/2)-6))) || (isVertical && ((draggableBottom >= dropzoneDivBottom + (cellSize/2)-6))) ) {
 
         //Restart ship position when its outside
         console.log("its outside!");
@@ -278,16 +309,8 @@ interact(".draggable").draggable({
         event.target.setAttribute("data-y", yTranslate); 
       }
 
-      /* All ships placed */
-      const numShips = document.querySelectorAll(".isPlaced").length;
-      const btn = document.querySelector(".button");
-      console.log(numShips)
-      if (numShips === 5) {
-        console.log("All ships placed")
-        btn.classList.add("btn-active");
-      } else {
-        btn.classList.remove("btn-active");
-      }
+      /* Check if all ships were placed */
+      checkAllShipsPlaced();
     },
   },
 });
