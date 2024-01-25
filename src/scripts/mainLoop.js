@@ -63,24 +63,29 @@ const computerLogic = (gameboard, player2) => {
 };
 
 const gameLoop = (player1, player2, player1Gameboard, player2Gameboard) => {
+  const enemyBoardElement = document.getElementById(`player2-board`);
   let currentPlayer = player1;
   let isFinished = false;
 
   const handleAttack = (x, y) => {
     if (currentPlayer === player1) {
       playerLogic(player2Gameboard, x, y, player1);
+      console.log(currentPlayer.name)
+      updateFbText(currentPlayer, player1, player2);
     } else {
-      computerLogic(player1Gameboard, player2);
+      computerLogic(player1Gameboard, player2);        
+      console.log(currentPlayer.name)
+      updateFbText(currentPlayer, player1, player2);
     }
 
     // Check if the game is over
     if (player1Gameboard.allShipsSunk() || player2Gameboard.allShipsSunk()) {
-      const enemyBoardElement = document.getElementById(`player2-board`);
       enemyBoardElement.removeEventListener("click", inputAttack);
 
       isFinished = true;
     } else {
       // Switch players if it is not finished
+      enemyBoardElement.addEventListener("click", inputAttack);
       currentPlayer = currentPlayer === player1 ? player2 : player1;
     }
   };
@@ -98,12 +103,28 @@ const gameLoop = (player1, player2, player1Gameboard, player2Gameboard) => {
 
       // Switch players if it is not finished
       if (!isFinished) {
-        handleAttack(x, y);
+        // Generate random delay between 300 - 1200 ms
+        const randomDelay = Math.floor(Math.random() * (1200 - 300 + 1)) + 300;
+
+        enemyBoardElement.removeEventListener("click", inputAttack);
+        setTimeout(() => {
+          handleAttack(x, y);          
+        }, 100);
       }
     }
   };
 
-  const enemyBoardElement = document.getElementById(`player2-board`);
+  const updateFbText = (currentPlayer, player1, player2) => {
+    const fbTitle = document.querySelector(".fb-title");
+    const fbText = document.querySelector(".fb-text");
+
+    if (currentPlayer.name === player1.name) {
+      fbTitle.textContent = "Opponent's Turn";
+    } else {
+      fbTitle.textContent = "Your Turn";
+    }
+  }
+
   enemyBoardElement.addEventListener("click", inputAttack);
 };
 
@@ -155,11 +176,16 @@ const handleClick = () => {
   const btn = document.querySelector(".button");
   const player2Board = document.querySelector("#player2-board");
   const instructionsDiv = document.querySelector(".instructions-container");
+  const boardContainer = document.querySelector(".container");
+  const fbContainer = document.querySelector(".fb-container");
 
   shipContainer.classList.add("hidden");
   btn.classList.add("hidden");
   instructionsDiv.classList.add("hidden");
   player2Board.classList.remove("hidden");
+  fbContainer.classList.remove("hidden");
+
+  boardContainer.classList.add("playing");
 };
 
 const checkAllShipsPlaced = () => {
