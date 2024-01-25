@@ -29,7 +29,8 @@ const initializeGame = () => {
   DragDrop.enableDragAndDrop(player1Gameboard, ships);
 
   // Computer places ships randomly for Player 2
-  //placeShipsRandomly(player2Gameboard);
+  Doom.placeShipsRandomly(player2Gameboard, ships);
+  console.log(player2Gameboard.gameBoard);
 
   // Render initial game boards
   Doom.renderGameboard("player1-board", player1Gameboard);
@@ -71,7 +72,7 @@ const gameLoop = (player1, player2, player1Gameboard, player2Gameboard) => {
     if (currentPlayer === player1) {
       playerLogic(player2Gameboard, x, y, player1);
       console.log(currentPlayer.name)
-      updateFbText(currentPlayer, player1, player2);
+      updateFbText(currentPlayer, player1, player2, x, y);
     } else {
       computerLogic(player1Gameboard, player2);        
       console.log(currentPlayer.name)

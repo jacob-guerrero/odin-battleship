@@ -40,4 +40,44 @@ const updateCellValue = (cell, cellValue) => {
   }
 };
 
-module.exports = { renderGameboard, updateCellValue };
+const placeShipsRandomly = (gameboard, ships) => {
+  for (const ship of ships) {
+    let isVertical = Math.random() < 0.5; // Randomly choose vertical or horizontal placement
+    let xCoord, yCoord;
+
+    // Generate random coordinates within the game board boundaries
+    if (isVertical) {
+      xCoord = Math.floor(Math.random() * (gameboard.gameBoard.length - ship.length + 1));
+      yCoord = Math.floor(Math.random() * gameboard.gameBoard[0].length);
+    } else {
+      xCoord = Math.floor(Math.random() * gameboard.gameBoard.length);
+      yCoord = Math.floor(Math.random() * (gameboard.gameBoard[0].length - ship.length + 1));
+    }
+
+    // Check if the randomly chosen position is valid for the ship
+    let isValidPosition = true;
+    for (let i = 0; i < ship.length; i++) {
+      if (isVertical) {
+        if (gameboard.gameBoard[xCoord + i][yCoord] !== 0) {
+          isValidPosition = false;
+          break;
+        }
+      } else {
+        if (gameboard.gameBoard[xCoord][yCoord + i] !== 0) {
+          isValidPosition = false;
+          break;
+        }
+      }
+    }
+
+    // If the position is valid, place the ship on the game board
+    if (isValidPosition) {
+      gameboard.placeShip(ship, xCoord, yCoord, isVertical);
+    } else {
+      // If the position is not valid, try again with a new random position for the ship
+      placeShipsRandomly(gameboard, [ship]); // Recursively call placeShipsRandomly with the same ship
+    }
+  }
+};
+
+module.exports = { renderGameboard, updateCellValue, placeShipsRandomly };
