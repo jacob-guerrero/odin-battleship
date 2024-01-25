@@ -170,7 +170,26 @@ const removePrevCoords = (ship, xCoord, yCoord, isVertical) => {
 
 
 /* Start game */
+const hideOpponentShips = () => {
+  const coordsOpponentShips = player2Gameboard.ships;
+  coordsOpponentShips.forEach(ship => {
+    /* console.log(ship.coordinates)
+    console.log(ship, ship.isSunk()) */
+    for (let i = 0; i < ship.coordinates.length; i++) {
+      const x = ship.coordinates[i][0];
+      const y = ship.coordinates[i][1];
+
+      const cellToHide = document.querySelector(
+        `#player2-board [data-x="${x}"][data-y="${y}"]`
+      );
+      cellToHide.style.backgroundColor = "lightblue";
+    }
+  });
+}
+
 const handleClick = () => {
+  hideOpponentShips();
+
   console.log("Clicked");
   const shipContainer = document.querySelector(".ship-container");
   const btn = document.querySelector(".button");

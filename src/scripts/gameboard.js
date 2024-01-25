@@ -78,7 +78,7 @@ const Gameboard = () => {
     return ships.every((ship) => ship.isSunk());
   };
 
-  return { gameBoard, placeShip, receiveAttack, allShipsSunk, missedAttacks };
+  return { gameBoard, placeShip, receiveAttack, allShipsSunk, missedAttacks, ships };
 };
 
 module.exports = Gameboard;
