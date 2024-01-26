@@ -13,10 +13,10 @@
     <div id="player1-board" class="game-board dropzone"></div>
     <div id="player2-board" class="game-board"></div>
 
-    <div class="ship-container hidden">
+    <div class="ship-container">
       <!-- Ships generated in JS -->
     </div>
-    <div class="instructions-container hidden">
+    <div class="instructions-container">
       <h2 class="instructions-title">Instructions</h2>
       <ul class="instructions-text">
         <li>Drag the ships (on the left) to the board, and then click to rotate</li>
@@ -24,11 +24,14 @@
       </ul>
     </div>
 
-    <button class="button hidden" role="button">START</button>
-    <div class="fb-container">
+    <button class="btn start" role="button">START</button>
+
+    <div class="fb-container hidden">
       <h3 class="fb-title">Your Turn</h3>
       <p class="fb-text">Click on the opponent's board (on the right) to shoot</p>
     </div>
+
+    <button class="btn reset hidden" role="button">RESTART</button>
   </div>
 </body>
 </html>

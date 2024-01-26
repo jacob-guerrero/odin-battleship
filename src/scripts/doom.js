@@ -19,6 +19,10 @@ const renderGameboard = (elementId, gameboard) => {
       boardElement.appendChild(cell);
     }
   }
+
+  if (elementId === "player2-board") {
+    boardElement.classList.add("hidden")
+  }
 };
 
 const updateCellValue = (cell, cellValue) => {

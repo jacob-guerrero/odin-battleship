@@ -97,7 +97,7 @@ h1, h2, h3, p {
   font-size: 1.1rem;
 }
 
-#player2-board.hidden, .ship-container.hidden, .button.hidden, .instructions-container.hidden, .fb-container.hidden {
+#player2-board.hidden, .ship-container.hidden, .btn.hidden, .instructions-container.hidden, .fb-container.hidden {
   display: none;
 }
 
@@ -150,11 +150,9 @@ h1, h2, h3, p {
   transition: background-color 0.4s ease-out;
 }
 
-/* Button */
+/* Buttons */
 
-.button {
-  grid-column-start: 4;
-  grid-row-start: 1;
+.btn {
   align-self: center;
   justify-self: center;
   width: 200px;
@@ -177,8 +175,17 @@ h1, h2, h3, p {
   -webkit-user-select: none;
   touch-action: manipulation;
 }
+.start {
+  grid-column-start: 4;
+  grid-row-start: 1;
+}
+.reset {
+  grid-column: 2/5;
+  grid-row-start: 3;
+  margin-top: 1rem;
+}
 
-.btn-active {
+.btn-active, .reset {
   cursor: pointer;
   border: 3px solid;
   background-color: #fbeee0;
@@ -188,14 +195,14 @@ h1, h2, h3, p {
   left: 0px;
 }
 
-.btn-active:active {
+.btn-active:active, .reset:active {
   box-shadow: 0px 0px 0px 0px;
   top: 5px;
   left: 5px;
 }
 
 @media (min-width: 768px) {
-  .button {
+  .btn {
     padding: 0.25em 0.75em;
   }
 }

@@ -13,6 +13,7 @@ const cellSize = 30; // Size of each cell
 let xStartCoord = 0;
 let yStartCoord = 0;
 const ships = [Ship(5), Ship(4), Ship(3), Ship(3), Ship(2)]; // Add more ships as needed
+const ships2 = [Ship(5), Ship(4), Ship(3), Ship(3), Ship(2)]; // Add more ships as needed
 
 const initializeGame = () => {
   const player1 = Player("Player 1");
@@ -29,7 +30,7 @@ const initializeGame = () => {
   DragDrop.enableDragAndDrop(player1Gameboard, ships);
 
   // Computer places ships randomly for Player 2
-  Doom.placeShipsRandomly(player2Gameboard, ships);
+  Doom.placeShipsRandomly(player2Gameboard, ships2);
   console.log(player2Gameboard.gameBoard);
 
   // Render initial game boards
@@ -72,11 +73,11 @@ const gameLoop = (player1, player2, player1Gameboard, player2Gameboard) => {
     if (currentPlayer === player1) {
       playerLogic(player2Gameboard, x, y, player1);
       console.log(currentPlayer.name)
-      updateFbText(currentPlayer, player1, player2, x, y);
+      updateFbText(currentPlayer, player1, x, y);
     } else {
       computerLogic(player1Gameboard, player2);        
       console.log(currentPlayer.name)
-      updateFbText(currentPlayer, player1, player2);
+      updateFbText(currentPlayer, player1, x, y);
     }
 
     // Check if the game is over
@@ -115,12 +116,21 @@ const gameLoop = (player1, player2, player1Gameboard, player2Gameboard) => {
     }
   };
 
-  const updateFbText = (currentPlayer, player1, player2) => {
+  const updateFbText = (currentPlayer, player1, x, y) => {
     const fbTitle = document.querySelector(".fb-title");
     const fbText = document.querySelector(".fb-text");
 
     if (currentPlayer.name === player1.name) {
       fbTitle.textContent = "Opponent's Turn";
+      
+      switch (player2Gameboard.gameBoard[x][y]) {
+        case 2:
+          fbText.textContent = "Hit!"
+          break;
+        default:
+          fbText.textContent = "Miss!"
+          break;
+      }
     } else {
       fbTitle.textContent = "Your Turn";
     }
@@ -193,7 +203,7 @@ const handleClick = () => {
 
   console.log("Clicked");
   const shipContainer = document.querySelector(".ship-container");
-  const btn = document.querySelector(".button");
+  const btn = document.querySelector(".start");
   const player2Board = document.querySelector("#player2-board");
   const instructionsDiv = document.querySelector(".instructions-container");
   const boardContainer = document.querySelector(".container");
@@ -210,7 +220,7 @@ const handleClick = () => {
 
 const checkAllShipsPlaced = () => {
   const numShips = document.querySelectorAll(".isPlaced").length;
-  const btn = document.querySelector(".button");
+  const btn = document.querySelector(".start");
   console.log(numShips)
   
   if (numShips === 5) {
