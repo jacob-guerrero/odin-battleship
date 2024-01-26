@@ -41,6 +41,21 @@ const initializeGame = () => {
   gameLoop(player1, player2, player1Gameboard, player2Gameboard);
 };
 
+const endGame = () => {
+  const fbTitle = document.querySelector(".fb-title");
+  const fbText = document.querySelector(".fb-text");
+  const btnReset = document.querySelector(".reset");
+
+  if (player1Gameboard.allShipsSunk()) {
+    fbTitle.textContent = "You Lost!"
+  } else {
+    fbTitle.textContent = "You Won!"
+  }
+
+  fbText.textContent = "Click RESTART to play again";
+  btnReset.classList.remove("hidden");
+}
+
 const playerLogic = (gameboard, x, y, player1) => {
   player1.attack(x, y, gameboard);
 
@@ -83,6 +98,8 @@ const gameLoop = (player1, player2, player1Gameboard, player2Gameboard) => {
     // Check if the game is over
     if (player1Gameboard.allShipsSunk() || player2Gameboard.allShipsSunk()) {
       enemyBoardElement.removeEventListener("click", inputAttack);
+
+      endGame();
 
       isFinished = true;
     } else {
