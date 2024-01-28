@@ -1,3 +1,5 @@
+const Gameboard = require("./gameboard");
+
 const renderGameboard = (elementId, gameboard) => {
   const boardElement = document.getElementById(elementId);
   boardElement.innerHTML = "";

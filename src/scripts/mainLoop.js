@@ -6,14 +6,14 @@ const DragDrop = require("./dragDrop");
 
 const interact = require("interactjs");
 
-const player1Gameboard = Gameboard();
-const player2Gameboard = Gameboard();
+let player1Gameboard = Gameboard();
+let player2Gameboard = Gameboard();
 
 const cellSize = 30; // Size of each cell
 let xStartCoord = 0;
 let yStartCoord = 0;
-const ships = [Ship(5), Ship(4), Ship(3), Ship(3), Ship(2)]; // Add more ships as needed
-const ships2 = [Ship(5), Ship(4), Ship(3), Ship(3), Ship(2)]; // Add more ships as needed
+let ships = [Ship(5), Ship(4), Ship(3), Ship(3), Ship(2)]; // Add more ships as needed
+let ships2 = [Ship(5), Ship(4), Ship(3), Ship(3), Ship(2)]; // Add more ships as needed
 
 const initializeGame = () => {
   const player1 = Player("Player 1");
@@ -41,6 +41,47 @@ const initializeGame = () => {
   gameLoop(player1, player2, player1Gameboard, player2Gameboard);
 };
 
+const restartGame = () => {
+  const shipContainer = document.querySelector(".ship-container");
+  const btn = document.querySelector(".start");
+  const instructionsDiv = document.querySelector(".instructions-container");
+  const boardContainer = document.querySelector(".container");
+  const fbContainer = document.querySelector(".fb-container");
+  const btnReset = document.querySelector(".reset");
+  
+  const fbTitle = document.querySelector(".fb-title");
+  const fbText = document.querySelector(".fb-text");
+  
+  shipContainer.classList.remove("hidden");
+  shipContainer.replaceChildren();
+  btn.classList.remove("hidden");
+  btnReset.classList.add("hidden");
+  instructionsDiv.classList.remove("hidden");
+  fbContainer.classList.add("hidden");
+  boardContainer.classList.remove("playing");
+
+  btn.classList.remove("btn-active");
+  btn.removeEventListener("click", handleClick);
+
+  fbTitle.textContent = "Your Turn";
+  fbText.textContent = "Click on the opponent's board (on the right) to shoot";
+
+  for (let row = 0; row < 10; row++) {
+    for (let col = 0; col < 10; col++) {
+      player1Gameboard.gameBoard[row][col] = 0; // Set the value at each position to 0
+      player2Gameboard.gameBoard[row][col] = 0; // Set the value at each position to 0
+    }
+  }
+
+  
+  ships = [Ship(5), Ship(4), Ship(3), Ship(3), Ship(2)]; // Create new ships
+  ships2 = [Ship(5), Ship(4), Ship(3), Ship(3), Ship(2)]; // Create new ships2
+
+  player1Gameboard = Gameboard();
+  player2Gameboard = Gameboard();
+  initializeGame();
+}
+
 const endGame = () => {
   const fbTitle = document.querySelector(".fb-title");
   const fbText = document.querySelector(".fb-text");
@@ -54,6 +95,8 @@ const endGame = () => {
 
   fbText.textContent = "Click RESTART to play again";
   btnReset.classList.remove("hidden");
+
+  btnReset.addEventListener("click", restartGame);
 }
 
 const playerLogic = (gameboard, x, y, player1) => {

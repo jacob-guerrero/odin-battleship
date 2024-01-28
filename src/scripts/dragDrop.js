@@ -10,6 +10,8 @@ const enableDragAndDrop = (gameboard, ships) => {
     idShip += 1;
     shipContainer.appendChild(shipElement);
   });
+
+  idShip = 0; // Restart ship counter
 };
 
 const createShipElement = (ship) => {
