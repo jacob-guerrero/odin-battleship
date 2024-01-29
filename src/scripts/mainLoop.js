@@ -10,15 +10,15 @@ let player1Gameboard = Gameboard();
 let player2Gameboard = Gameboard();
 
 const cellSize = 30; // Size of each cell
-let xStartCoord = 0;
-let yStartCoord = 0;
+/* let xStartCoord = 0;
+let yStartCoord = 0; */
 let ships = [Ship(5), Ship(4), Ship(3), Ship(3), Ship(2)]; // Add more ships as needed
 let ships2 = [Ship(5), Ship(4), Ship(3), Ship(3), Ship(2)]; // Add more ships as needed
 
 const initializeGame = () => {
   const player1 = Player("Player 1");
   const player2 = Player("Computer");
-  
+
   const ship1 = Ship(3);
   const ship2 = Ship(3);
   // Samples ships
@@ -26,12 +26,10 @@ const initializeGame = () => {
   player2Gameboard.placeShip(ship2, 2, 2, true);
 
   // Allow Player 1 to drag and drop ships
-  console.log(player1Gameboard.gameBoard);
   DragDrop.enableDragAndDrop(player1Gameboard, ships);
 
   // Computer places ships randomly for Player 2
   Doom.placeShipsRandomly(player2Gameboard, ships2);
-  console.log(player2Gameboard.gameBoard);
 
   // Render initial game boards
   Doom.renderGameboard("player1-board", player1Gameboard);
@@ -48,10 +46,10 @@ const restartGame = () => {
   const boardContainer = document.querySelector(".container");
   const fbContainer = document.querySelector(".fb-container");
   const btnReset = document.querySelector(".reset");
-  
+
   const fbTitle = document.querySelector(".fb-title");
   const fbText = document.querySelector(".fb-text");
-  
+
   shipContainer.classList.remove("hidden");
   shipContainer.replaceChildren();
   btn.classList.remove("hidden");
@@ -73,14 +71,13 @@ const restartGame = () => {
     }
   }
 
-  
   ships = [Ship(5), Ship(4), Ship(3), Ship(3), Ship(2)]; // Create new ships
   ships2 = [Ship(5), Ship(4), Ship(3), Ship(3), Ship(2)]; // Create new ships2
 
   player1Gameboard = Gameboard();
   player2Gameboard = Gameboard();
   initializeGame();
-}
+};
 
 const endGame = () => {
   const fbTitle = document.querySelector(".fb-title");
@@ -88,16 +85,16 @@ const endGame = () => {
   const btnReset = document.querySelector(".reset");
 
   if (player1Gameboard.allShipsSunk()) {
-    fbTitle.textContent = "You Lost!"
+    fbTitle.textContent = "You Lost!";
   } else {
-    fbTitle.textContent = "You Won!"
+    fbTitle.textContent = "You Won!";
   }
 
   fbText.textContent = "Click RESTART to play again";
   btnReset.classList.remove("hidden");
 
   btnReset.addEventListener("click", restartGame);
-}
+};
 
 const playerLogic = (gameboard, x, y, player1) => {
   player1.attack(x, y, gameboard);
@@ -130,11 +127,9 @@ const gameLoop = (player1, player2, player1Gameboard, player2Gameboard) => {
   const handleAttack = (x, y) => {
     if (currentPlayer === player1) {
       playerLogic(player2Gameboard, x, y, player1);
-      console.log(currentPlayer.name)
       updateFbText(currentPlayer, player1, x, y);
     } else {
-      computerLogic(player1Gameboard, player2);        
-      console.log(currentPlayer.name)
+      computerLogic(player1Gameboard, player2);
       updateFbText(currentPlayer, player1, x, y);
     }
 
@@ -170,8 +165,8 @@ const gameLoop = (player1, player2, player1Gameboard, player2Gameboard) => {
 
         enemyBoardElement.removeEventListener("click", inputAttack);
         setTimeout(() => {
-          handleAttack(x, y);          
-        }, 100);
+          handleAttack(x, y);
+        }, randomDelay);
       }
     }
   };
@@ -182,44 +177,54 @@ const gameLoop = (player1, player2, player1Gameboard, player2Gameboard) => {
 
     if (currentPlayer.name === player1.name) {
       fbTitle.textContent = "Opponent's Turn";
-      
+
       switch (player2Gameboard.gameBoard[x][y]) {
         case 2:
-          fbText.textContent = "Hit!"
+          fbText.textContent = "Hit!";
           break;
         default:
-          fbText.textContent = "Miss!"
+          fbText.textContent = "Miss!";
           break;
       }
     } else {
       fbTitle.textContent = "Your Turn";
     }
-  }
+  };
 
   enemyBoardElement.addEventListener("click", inputAttack);
 };
 
-
 const updateGameboard = (ship, xCoord, yCoord, isVertical) => {
-  const isOverlapping = player1Gameboard.placeShip(ship, xCoord, yCoord, isVertical);
-  console.log(player1Gameboard.gameBoard, ship, xCoord, yCoord, isVertical);
+  const isOverlapping = player1Gameboard.placeShip(
+    ship,
+    xCoord,
+    yCoord,
+    isVertical
+  );
+  //console.log(player1Gameboard.gameBoard, ship, xCoord, yCoord, isVertical);
 
   for (let i = 0; i < ship.length; i++) {
     if (!isVertical) {
       const cellToUpdate = document.querySelector(
         `#player1-board [data-x="${xCoord}"][data-y="${yCoord + i}"]`
       );
-      Doom.updateCellValue(cellToUpdate, player1Gameboard.gameBoard[xCoord][yCoord + i]);
+      Doom.updateCellValue(
+        cellToUpdate,
+        player1Gameboard.gameBoard[xCoord][yCoord + i]
+      );
     } else {
       const cellToUpdate = document.querySelector(
         `#player1-board [data-x="${xCoord + i}"][data-y="${yCoord}"]`
       );
-      Doom.updateCellValue(cellToUpdate, player1Gameboard.gameBoard[xCoord + i][yCoord]);
+      Doom.updateCellValue(
+        cellToUpdate,
+        player1Gameboard.gameBoard[xCoord + i][yCoord]
+      );
     }
   }
-  
+
   return isOverlapping;
-}
+};
 
 const removePrevCoords = (ship, xCoord, yCoord, isVertical) => {
   for (let i = 0; i < ship.length; i++) {
@@ -228,22 +233,27 @@ const removePrevCoords = (ship, xCoord, yCoord, isVertical) => {
       const cellToUpdate = document.querySelector(
         `#player1-board [data-x="${xCoord}"][data-y="${yCoord + i}"]`
       );
-      Doom.updateCellValue(cellToUpdate, player1Gameboard.gameBoard[xCoord][yCoord + i])
+      Doom.updateCellValue(
+        cellToUpdate,
+        player1Gameboard.gameBoard[xCoord][yCoord + i]
+      );
     } else {
       player1Gameboard.gameBoard[xCoord + i][yCoord] = 0;
       const cellToUpdate = document.querySelector(
         `#player1-board [data-x="${xCoord + i}"][data-y="${yCoord}"]`
       );
-      Doom.updateCellValue(cellToUpdate, player1Gameboard.gameBoard[xCoord + i][yCoord])
+      Doom.updateCellValue(
+        cellToUpdate,
+        player1Gameboard.gameBoard[xCoord + i][yCoord]
+      );
     }
   }
-}
-
+};
 
 /* Start game */
 const hideOpponentShips = () => {
   const coordsOpponentShips = player2Gameboard.ships;
-  coordsOpponentShips.forEach(ship => {
+  coordsOpponentShips.forEach((ship) => {
     /* console.log(ship.coordinates)
     console.log(ship, ship.isSunk()) */
     for (let i = 0; i < ship.coordinates.length; i++) {
@@ -256,12 +266,11 @@ const hideOpponentShips = () => {
       cellToHide.style.backgroundColor = "lightblue";
     }
   });
-}
+};
 
 const handleClick = () => {
   hideOpponentShips();
 
-  console.log("Clicked");
   const shipContainer = document.querySelector(".ship-container");
   const btn = document.querySelector(".start");
   const player2Board = document.querySelector("#player2-board");
@@ -281,28 +290,25 @@ const handleClick = () => {
 const checkAllShipsPlaced = () => {
   const numShips = document.querySelectorAll(".isPlaced").length;
   const btn = document.querySelector(".start");
-  console.log(numShips)
-  
+
   if (numShips === 5) {
-    console.log("All ships placed")
     btn.classList.add("btn-active");
-    
+
     btn.addEventListener("click", handleClick);
   } else {
     btn.classList.remove("btn-active");
 
     btn.removeEventListener("click", handleClick);
   }
-}
-
+};
 
 // target elements with the "draggable" class
 interact(".draggable").draggable({
   // enable inertial throwing
   inertia: {
-    resistance: 50,       // Lower resistance for slower speed
+    resistance: 50, // Lower resistance for slower speed
     minSpeed: 200, // Adjust the maximum speed
-    endSpeed: 100,           // Adjust the minimum speed
+    endSpeed: 100, // Adjust the minimum speed
   },
   // keep the element within the area of it's parent
   modifiers: [
@@ -320,109 +326,138 @@ interact(".draggable").draggable({
 
     // call this function on every dragend event
     end(event) {
-      const dropzoneDiv = document.querySelector('.dropzone');
+      const dropzoneDiv = document.querySelector(".dropzone");
       const dropzoneDivRight = dropzoneDiv.getBoundingClientRect().right;
       const dropzoneDivBottom = dropzoneDiv.getBoundingClientRect().bottom;
       const draggableRight = event.target.getBoundingClientRect().right;
       const draggableBottom = event.target.getBoundingClientRect().bottom;
-      
-      const xCoord = +event.target.getBoundingClientRect().x - +dropzoneDiv.getBoundingClientRect().x + (cellSize / 2);
-      const yCoord = +event.target.getBoundingClientRect().y - +dropzoneDiv.getBoundingClientRect().y + (cellSize / 2);
 
-      console.log("x: " + Math.floor(yCoord / cellSize));
+      const xCoord =
+        +event.target.getBoundingClientRect().x -
+        +dropzoneDiv.getBoundingClientRect().x +
+        cellSize / 2;
+      const yCoord =
+        +event.target.getBoundingClientRect().y -
+        +dropzoneDiv.getBoundingClientRect().y +
+        cellSize / 2;
+
+      /* console.log("x: " + Math.floor(yCoord / cellSize));
       console.log("y: " + Math.floor(xCoord / cellSize));
-      console.log(xCoord, yCoord)
+      console.log(xCoord, yCoord) */
 
       const isVertical = !event.target.classList.contains("horizontal");
-      
-      if ( (draggableRight >= dropzoneDivRight + (cellSize/2)-4) || (draggableBottom >= dropzoneDivBottom + (cellSize/2)-4) || (Math.floor(yCoord / cellSize) < 0) || (Math.floor(xCoord / cellSize) < 0) || (isVertical && ((draggableRight >= dropzoneDivRight + (cellSize/2)-6))) || (isVertical && ((draggableBottom >= dropzoneDivBottom + (cellSize/2)-6))) ) {
 
+      if (
+        draggableRight >= dropzoneDivRight + cellSize / 2 - 4 ||
+        draggableBottom >= dropzoneDivBottom + cellSize / 2 - 4 ||
+        Math.floor(yCoord / cellSize) < 0 ||
+        Math.floor(xCoord / cellSize) < 0 ||
+        (isVertical && draggableRight >= dropzoneDivRight + cellSize / 2 - 6) ||
+        (isVertical && draggableBottom >= dropzoneDivBottom + cellSize / 2 - 6)
+      ) {
         //Restart ship position when its outside
-        console.log("its outside!");
-        console.log(xStartCoord, yStartCoord);
         event.target.style.transform = "translate(" + 0 + "px, " + 0 + "px)";
         event.target.setAttribute("data-x", "");
         event.target.setAttribute("data-y", "");
-        event.target.style.width = ships[+event.target.dataset.ship].length * cellSize - 4 + "px";
+        event.target.style.width =
+          ships[+event.target.dataset.ship].length * cellSize - 4 + "px";
         event.target.style.height = cellSize - 4 + "px";
 
         //Restart ship properties when its placed
-        if(event.target.classList.contains("isPlaced")) {
+        if (event.target.classList.contains("isPlaced")) {
           event.target.classList.remove("isPlaced");
-          
+
           const ship = ships[+event.target.dataset.ship];
           const isVertical = !event.target.classList.contains("horizontal");
           const xCoordPlaced = event.target.dataset.xplaced;
           const yCoordPlaced = event.target.dataset.yplaced;
-          
+
           // Remove prev coords
           removePrevCoords(ship, +xCoordPlaced, +yCoordPlaced, isVertical);
-          
+
           event.target.classList.add("horizontal");
           event.target.setAttribute("data-xPlaced", "");
           event.target.setAttribute("data-yPlaced", "");
         }
-      }
-      else {
+      } else {
         const isVertical = !event.target.classList.contains("horizontal");
-        const isOverlapping = updateGameboard(ships[+event.target.dataset.ship], Math.floor(yCoord / cellSize), Math.floor(xCoord / cellSize), isVertical);
+        const isOverlapping = updateGameboard(
+          ships[+event.target.dataset.ship],
+          Math.floor(yCoord / cellSize),
+          Math.floor(xCoord / cellSize),
+          isVertical
+        );
 
         if (isOverlapping === true) {
           //Restart ship position when its overlapping
-          console.log("its overlapping!");
           event.target.style.transform = "translate(" + 0 + "px, " + 0 + "px)";
           event.target.setAttribute("data-x", "");
           event.target.setAttribute("data-y", "");
-          event.target.style.width = ships[+event.target.dataset.ship].length * cellSize - 4 + "px";
+          event.target.style.width =
+            ships[+event.target.dataset.ship].length * cellSize - 4 + "px";
           event.target.style.height = cellSize - 4 + "px";
 
           //Restart ship properties when its overlapping and placed
-          if(event.target.classList.contains("isPlaced")) {
+          if (event.target.classList.contains("isPlaced")) {
             event.target.classList.remove("isPlaced");
-  
+
             const ship = ships[+event.target.dataset.ship];
             const isVertical = !event.target.classList.contains("horizontal");
             const xCoordPlaced = event.target.dataset.xplaced;
             const yCoordPlaced = event.target.dataset.yplaced;
-            
+
             // Remove prev coords
             removePrevCoords(ship, +xCoordPlaced, +yCoordPlaced, isVertical);
-            
+
             event.target.classList.add("horizontal");
             event.target.setAttribute("data-xPlaced", "");
             event.target.setAttribute("data-yPlaced", "");
           }
-        } 
-        else {
+        } else {
           event.target.classList.add("isPlaced");
         }
-        if (event.target.classList.contains("isPlaced") && event.target.dataset.xplaced) {
+        if (
+          event.target.classList.contains("isPlaced") &&
+          event.target.dataset.xplaced
+        ) {
           const ship = ships[+event.target.dataset.ship];
           const isVertical = !event.target.classList.contains("horizontal");
           const xCoordPlaced = event.target.dataset.xplaced;
           const yCoordPlaced = event.target.dataset.yplaced;
-          
+
           // Remove prev coords
           removePrevCoords(ship, +xCoordPlaced, +yCoordPlaced, isVertical);
-          console.log("Removed!", +isVertical, +xCoordPlaced, yCoordPlaced)
         }
       }
 
       // Placing ship
-      if(event.target.classList.contains("isPlaced")) {
-        event.target.setAttribute("data-xPlaced", Math.floor(yCoord / cellSize));
-        event.target.setAttribute("data-yPlaced", Math.floor(xCoord / cellSize));
-                
+      if (event.target.classList.contains("isPlaced")) {
+        event.target.setAttribute(
+          "data-xPlaced",
+          Math.floor(yCoord / cellSize)
+        );
+        event.target.setAttribute(
+          "data-yPlaced",
+          Math.floor(xCoord / cellSize)
+        );
+
         const ship = +event.target.dataset.ship;
         const xTranslate = Math.floor(xCoord / cellSize) * cellSize + 2; // +2px: borders
-        const yTranslate = (Math.floor(yCoord / cellSize) * cellSize) - dropzoneDivBottom + 60 - (ship*cellSize) + 4 + (ship*4); // +60px: distance between ship-container to board, +4px: borders, +ship*cellSize: size of other ships, +ship*4: other ships borders 
-        
+        const yTranslate =
+          Math.floor(yCoord / cellSize) * cellSize -
+          dropzoneDivBottom +
+          60 -
+          ship * cellSize +
+          4 +
+          ship * 4; // +60px: distance between ship-container to board, +4px: borders, +ship*cellSize: size of other ships, +ship*4: other ships borders
+
         // translate the element
-        event.target.style.transform = "translate(" + xTranslate + "px, " + yTranslate + "px)";
+        event.target.style.transform =
+          "translate(" + xTranslate + "px, " + yTranslate + "px)";
 
         // update the posiion attributes
         event.target.setAttribute("data-x", xTranslate);
-        event.target.setAttribute("data-y", yTranslate); 
+        event.target.setAttribute("data-y", yTranslate);
       }
 
       /* Check if all ships were placed */
@@ -431,20 +466,20 @@ interact(".draggable").draggable({
   },
 });
 
-
 function shipPlacedChecker(target) {
   const shipTarget = target.getBoundingClientRect();
-  const allPlacedShips = Array.from(document.querySelectorAll('.isPlaced'))
-      .filter(ship => ship !== target)
-      .map(ship => ship.getBoundingClientRect());
+  const allPlacedShips = Array.from(document.querySelectorAll(".isPlaced"))
+    .filter((ship) => ship !== target)
+    .map((ship) => ship.getBoundingClientRect());
 
   // Check if the target's rectangle doesn't overlap with any other rectangle
-  return allPlacedShips.some(ship => (
+  return allPlacedShips.some(
+    (ship) =>
       shipTarget.right > ship.left &&
       shipTarget.left < ship.right &&
       shipTarget.bottom > ship.top &&
       shipTarget.top < ship.bottom
-  ));
+  );
 }
 
 function dragMoveListener(event) {
@@ -472,7 +507,7 @@ interact(".dropzone").dropzone({
   // only accept elements matching this CSS selector
   accept: [".ship"],
   // Require a 80% element overlap for a drop to be possible
-  overlap: 0.80,
+  overlap: 0.8,
 
   // listen for drop related events:
 
@@ -524,19 +559,22 @@ interact(".drag-drop").draggable({
 // this function is used later in the resizing and gesture demos
 window.dragMoveListener = dragMoveListener;
 
-
 /* const getStartCoords = (event) => {
   xStartCoord = +event.target.getBoundingClientRect().x;
   yStartCoord = +event.target.getBoundingClientRect().y;
   console.log(xStartCoord, yStartCoord);
 } */
 
-
-
 /* on tap ships */
-const checkShips = (player1Gameboard, xCoordPlaced, yCoordPlaced, ship, isVertical) => {
+const checkShips = (
+  player1Gameboard,
+  xCoordPlaced,
+  yCoordPlaced,
+  ship,
+  isVertical
+) => {
   for (let i = 1; i < ship.length; i++) {
-    const x = isVertical ? xCoordPlaced : xCoordPlaced + i ;
+    const x = isVertical ? xCoordPlaced : xCoordPlaced + i;
     const y = isVertical ? yCoordPlaced + i : yCoordPlaced;
 
     if (player1Gameboard.gameBoard[x][y] === 1) {
@@ -546,66 +584,83 @@ const checkShips = (player1Gameboard, xCoordPlaced, yCoordPlaced, ship, isVertic
   return false;
 };
 
-interact('.ship')
-  .on('tap', function (event) {
-    const dropzoneDiv = document.querySelector('.dropzone');
+interact(".ship").on("tap", function (event) {
+  const dropzoneDiv = document.querySelector(".dropzone");
 
-    const xCoord = +event.target.getBoundingClientRect().x - +dropzoneDiv.getBoundingClientRect().x + (cellSize / 2);
-    const yCoord = +event.target.getBoundingClientRect().y - +dropzoneDiv.getBoundingClientRect().y + (cellSize / 2);
+  const xCoord =
+    +event.target.getBoundingClientRect().x -
+    +dropzoneDiv.getBoundingClientRect().x +
+    cellSize / 2;
+  const yCoord =
+    +event.target.getBoundingClientRect().y -
+    +dropzoneDiv.getBoundingClientRect().y +
+    cellSize / 2;
 
-    if ( event.target.classList.contains("isPlaced") ) {
-      const ship = ships[+event.target.dataset.ship];
-      const isVertical = !event.target.classList.contains("horizontal");
-      
-      const xCoordPlaced = +event.target.dataset.xplaced;
-      const yCoordPlaced = +event.target.dataset.yplaced;
-      
-      // Check if ship will be inside gameboard
-      if ( (xCoordPlaced + ship.length <= 10) && (yCoordPlaced + ship.length <= 10) ) {
-        // Check if ship will not be overlapping
-        if (!checkShips(player1Gameboard, xCoordPlaced, yCoordPlaced, ship, isVertical)) {
-          //Change ship direction
-          const length = ship.length * cellSize - 4;
-          const size = cellSize - 4;
+  if (event.target.classList.contains("isPlaced")) {
+    const ship = ships[+event.target.dataset.ship];
+    const isVertical = !event.target.classList.contains("horizontal");
 
-          event.currentTarget.style.width = isVertical ? `${length}px` : `${size}px`;
-          event.currentTarget.style.height = isVertical ? `${size}px` : `${length}px`;
+    const xCoordPlaced = +event.target.dataset.xplaced;
+    const yCoordPlaced = +event.target.dataset.yplaced;
 
-          // Remove prev coords and update gameboard
-          removePrevCoords(ship, xCoordPlaced, yCoordPlaced, isVertical);
-          event.currentTarget.classList.toggle('horizontal');
-          updateGameboard(ship, Math.floor(yCoord / cellSize), Math.floor(xCoord / cellSize), !isVertical);
-        }
-        else {
-          event.currentTarget.classList.add('overlapping');
-          
-          setTimeout(() => {
-            event.currentTarget.classList.add('overlapping-fade');
-            setTimeout(() => {
-              event.currentTarget.classList.remove('overlapping');
-              event.currentTarget.classList.remove('overlapping-fade');
-            }, 400);
-          }, 200)
-        }
-      }
-      else {
-        event.currentTarget.classList.add('overlapping');
-        
+    // Check if ship will be inside gameboard
+    if (xCoordPlaced + ship.length <= 10 && yCoordPlaced + ship.length <= 10) {
+      // Check if ship will not be overlapping
+      if (
+        !checkShips(
+          player1Gameboard,
+          xCoordPlaced,
+          yCoordPlaced,
+          ship,
+          isVertical
+        )
+      ) {
+        //Change ship direction
+        const length = ship.length * cellSize - 4;
+        const size = cellSize - 4;
+
+        event.currentTarget.style.width = isVertical
+          ? `${length}px`
+          : `${size}px`;
+        event.currentTarget.style.height = isVertical
+          ? `${size}px`
+          : `${length}px`;
+
+        // Remove prev coords and update gameboard
+        removePrevCoords(ship, xCoordPlaced, yCoordPlaced, isVertical);
+        event.currentTarget.classList.toggle("horizontal");
+        updateGameboard(
+          ship,
+          Math.floor(yCoord / cellSize),
+          Math.floor(xCoord / cellSize),
+          !isVertical
+        );
+      } else {
+        event.currentTarget.classList.add("overlapping");
+
         setTimeout(() => {
-          event.currentTarget.classList.add('overlapping-fade');
+          event.currentTarget.classList.add("overlapping-fade");
           setTimeout(() => {
-            event.currentTarget.classList.remove('overlapping');
-            event.currentTarget.classList.remove('overlapping-fade');
+            event.currentTarget.classList.remove("overlapping");
+            event.currentTarget.classList.remove("overlapping-fade");
           }, 400);
-        }, 200)
+        }, 200);
       }
+    } else {
+      event.currentTarget.classList.add("overlapping");
+
+      setTimeout(() => {
+        event.currentTarget.classList.add("overlapping-fade");
+        setTimeout(() => {
+          event.currentTarget.classList.remove("overlapping");
+          event.currentTarget.classList.remove("overlapping-fade");
+        }, 400);
+      }, 200);
     }
+  }
 
-    event.preventDefault();
-  })
-
-
-
+  event.preventDefault();
+});
 
 // Initialize the game
 initializeGame();

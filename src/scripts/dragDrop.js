@@ -3,8 +3,6 @@ let idShip = 0;
 const shipContainer = document.querySelector(".ship-container")
 
 const enableDragAndDrop = (gameboard, ships) => {
-  console.log(gameboard.gameBoard);
-
   ships.forEach((ship) => {
     const shipElement = createShipElement(ship);
     idShip += 1;
