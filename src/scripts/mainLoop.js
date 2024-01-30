@@ -118,6 +118,42 @@ const computerLogic = (gameboard, player2) => {
     Doom.updateCellValue(cellToUpdate, gameboard.gameBoard[x][y]);
   }
 };
+const checkShipSunk = (opponentPlayer, currentPlayer, player1, x, y) => {
+  const opponentPlayerShips = opponentPlayer.ships;
+  const opponentPlayerBoard = currentPlayer === player1 ? "player2-board" : "player1-board";
+  const cellClicked = document.querySelector(`#${opponentPlayerBoard} .cell[data-x="${x}"][data-y="${y}"]`);
+
+  opponentPlayerShips.forEach(ship => {
+    const isVertical = ship.coordinates[0][0] === ship.coordinates[1][0];
+    const sunkShip = ship.isSunk();
+
+    if (sunkShip && !cellClicked.classList.contains("ship-sunk")) {
+      if (isVertical) {
+        ship.coordinates.forEach(([row, col], index) => {
+          const cellElement = document.querySelector(`#${opponentPlayerBoard} .cell[data-x="${row}"][data-y="${col}"]`);
+          if (index === 0) {
+            cellElement.classList.add('ship-sunk', 'left-h');
+          } else if (index === ship.coordinates.length - 1) {
+            cellElement.classList.add('ship-sunk', 'right-h');
+          } else {
+            cellElement.classList.add('ship-sunk', 'middle-h');
+          }
+        });  
+      } else {
+        ship.coordinates.forEach(([row, col], index) => {
+          const cellElement = document.querySelector(`#${opponentPlayerBoard} .cell[data-x="${row}"][data-y="${col}"]`);
+          if (index === 0) {
+            cellElement.classList.add('ship-sunk', 'top-v');
+          } else if (index === ship.coordinates.length - 1) {
+            cellElement.classList.add('ship-sunk', 'bottom-v');
+          } else {
+            cellElement.classList.add('ship-sunk', 'middle-v');
+          }
+        });  
+      }
+    }
+  });
+}
 
 const gameLoop = (player1, player2, player1Gameboard, player2Gameboard) => {
   const enemyBoardElement = document.getElementById(`player2-board`);
@@ -127,9 +163,11 @@ const gameLoop = (player1, player2, player1Gameboard, player2Gameboard) => {
   const handleAttack = (x, y) => {
     if (currentPlayer === player1) {
       playerLogic(player2Gameboard, x, y, player1);
+      checkShipSunk(player2Gameboard, currentPlayer, player1, x, y);
       updateFbText(currentPlayer, player1, x, y);
     } else {
       computerLogic(player1Gameboard, player2);
+      checkShipSunk(player1Gameboard, currentPlayer, player1, x, y);
       updateFbText(currentPlayer, player1, x, y);
     }
 

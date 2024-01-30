@@ -206,3 +206,28 @@ h1, h2, h3, p {
     padding: 0.25em 0.75em;
   }
 }
+
+/* Sunk ships */
+
+.ship-sunk {
+  border-style: double;
+  border-color: lightgray;
+}
+.left-h {
+  border-width: 4px 0 4px 4px; /* top right bottom left */
+}
+.middle-h {
+  border-width: 4px 0 4px 0; /* top right bottom left */
+}
+.right-h {
+  border-width: 4px 4px 4px 0; /* top right bottom left */
+}
+.top-v {
+  border-width: 4px 4px 0 4px; /* top right bottom left */
+}
+.middle-v {
+  border-width: 0 4px 0 4px; /* top right bottom left */
+}
+.bottom-v {
+  border-width: 0 4px 4px 4px; /* top right bottom left */  
+}
