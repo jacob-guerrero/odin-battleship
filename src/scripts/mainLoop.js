@@ -49,9 +49,13 @@ const restartGame = () => {
 
   const fbTitle = document.querySelector(".fb-title");
   const fbText = document.querySelector(".fb-text");
+  const fbShips1 = document.querySelector(".fb-ships-1");
+  const fbShips2 = document.querySelector(".fb-ships-2");
 
   shipContainer.classList.remove("hidden");
   shipContainer.replaceChildren();
+  fbShips1.replaceChildren();
+  fbShips2.replaceChildren();
   btn.classList.remove("hidden");
   btnReset.classList.add("hidden");
   instructionsDiv.classList.remove("hidden");
@@ -118,16 +122,16 @@ const computerLogic = (gameboard, player2) => {
     Doom.updateCellValue(cellToUpdate, gameboard.gameBoard[x][y]);
   }
 };
-const checkShipSunk = (opponentPlayer, currentPlayer, player1, x, y) => {
-  const opponentPlayerShips = opponentPlayer.ships;
+const checkShipSunk = (opponentPlayerShips, currentPlayer, player1, x, y) => {
   const opponentPlayerBoard = currentPlayer === player1 ? "player2-board" : "player1-board";
+  const fbShipsRep = currentPlayer === player1 ? "fb-ships-2" : "fb-ships-1";
   const cellClicked = document.querySelector(`#${opponentPlayerBoard} .cell[data-x="${x}"][data-y="${y}"]`);
 
-  opponentPlayerShips.forEach(ship => {
+  opponentPlayerShips.forEach((ship, shipIndex) => {
     const isVertical = ship.coordinates[0][0] === ship.coordinates[1][0];
     const sunkShip = ship.isSunk();
 
-    if (sunkShip && !cellClicked.classList.contains("ship-sunk")) {
+    if (sunkShip && !cellClicked.classList.contains("ship-sunk") && !ship.processed) {
       if (isVertical) {
         ship.coordinates.forEach(([row, col], index) => {
           const cellElement = document.querySelector(`#${opponentPlayerBoard} .cell[data-x="${row}"][data-y="${col}"]`);
@@ -151,6 +155,13 @@ const checkShipSunk = (opponentPlayer, currentPlayer, player1, x, y) => {
           }
         });  
       }
+
+      ship.processed = true;
+      console.log(shipIndex);
+      const dataRepCells = document.querySelectorAll(`.${fbShipsRep} [data-ship-rep="${shipIndex}"] .ship-rep-cell`);
+      dataRepCells.forEach(cell => {
+        cell.style.backgroundColor = "red";
+      });
     }
   });
 }
@@ -163,11 +174,11 @@ const gameLoop = (player1, player2, player1Gameboard, player2Gameboard) => {
   const handleAttack = (x, y) => {
     if (currentPlayer === player1) {
       playerLogic(player2Gameboard, x, y, player1);
-      checkShipSunk(player2Gameboard, currentPlayer, player1, x, y);
+      checkShipSunk(ships2, currentPlayer, player1, x, y);
       updateFbText(currentPlayer, player1, x, y);
     } else {
       computerLogic(player1Gameboard, player2);
-      checkShipSunk(player1Gameboard, currentPlayer, player1, x, y);
+      checkShipSunk(ships, currentPlayer, player1, x, y);
       updateFbText(currentPlayer, player1, x, y);
     }
 
@@ -308,6 +319,8 @@ const hideOpponentShips = () => {
 
 const handleClick = () => {
   hideOpponentShips();
+  Doom.placeShipRepresentations("player1-board", ships);
+  Doom.placeShipRepresentations("player2-board", ships2);
 
   const shipContainer = document.querySelector(".ship-container");
   const btn = document.querySelector(".start");

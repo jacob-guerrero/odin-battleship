@@ -96,6 +96,28 @@ h1, h2, h3, p {
   font-family: monospace, sans-serif, system-ui;
   font-size: 1.1rem;
 }
+.fb-ships-1, .fb-ships-2 {
+  display: flex;
+  gap: 0 15px;
+  flex-wrap: wrap;
+}
+.fb-ships-1 {
+  padding: 1rem 6.5rem 0 1rem;
+  grid-row-start: 3;
+  grid-column: 2/3;
+}
+.fb-ships-2 {
+  flex-direction: row-reverse;
+  padding: 1rem 1rem 0 6.5rem;
+  grid-row-start: 3;
+  grid-column: 4/5;
+}
+.ship-rep-cell {
+  display: inline-block;
+  background-color: gray;
+  border: 1px solid #fff;
+  min-width: max-content;
+}
 
 #player2-board.hidden, .ship-container.hidden, .btn.hidden, .instructions-container.hidden, .fb-container.hidden {
   display: none;

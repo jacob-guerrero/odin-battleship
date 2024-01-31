@@ -84,4 +84,33 @@ const placeShipsRandomly = (gameboard, ships) => {
   }
 };
 
-module.exports = { renderGameboard, updateCellValue, placeShipsRandomly };
+const placeShipRepresentations = (gameBoard, ships) => {  
+  let idShipRep = 0;
+  const fbGameBoard = gameBoard === "player1-board" ? "fb-ships-1" : "fb-ships-2";
+  const fbContainer = document.querySelector(`.${fbGameBoard}`);
+
+  ships.forEach(ship => {
+    // Create ship representation element
+    const shipElement = document.createElement('div');
+    shipElement.dataset.shipRep = idShipRep;
+    shipElement.classList.add('ship-rep');
+    const shipSize = 12;
+    // Customize style based on length
+    for (let i = 0; i < ship.length; i++) {
+      const shipCell = document.createElement('div');
+      shipCell.classList.add('ship-rep-cell');
+
+      shipCell.style.width = `${shipSize}px`;
+      shipCell.style.height = `${shipSize}px`;
+
+      shipElement.appendChild(shipCell);
+    }
+    
+    idShipRep += 1;
+    fbContainer.appendChild(shipElement);
+  });
+  
+  idShipRep = 0;
+};
+
+module.exports = { renderGameboard, updateCellValue, placeShipsRandomly, placeShipRepresentations };
