@@ -62,7 +62,7 @@ const Gameboard = () => {
       const hitShip = ships.find((ship) =>
         ship.coordinates.some((coord) => coord[0] === x && coord[1] === y)
       );
-      
+
       gameBoard[x][y] = 2; // Mark the hit on the board
       hitShip.hit();
       return true;
@@ -78,7 +78,14 @@ const Gameboard = () => {
     return ships.every((ship) => ship.isSunk());
   };
 
-  return { gameBoard, placeShip, receiveAttack, allShipsSunk, missedAttacks, ships };
+  return {
+    gameBoard,
+    placeShip,
+    receiveAttack,
+    allShipsSunk,
+    missedAttacks,
+    ships,
+  };
 };
 
 module.exports = Gameboard;

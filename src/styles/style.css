@@ -55,6 +55,9 @@ h1, h2, h3, p {
   grid-column-start: 4;
   grid-row-start: 1;
 }
+.board-opacity {
+  opacity: 0.5; /* Adjust the opacity value as needed */
+}
 .ship-container {
   grid-row-start: 2;
   grid-column-start: 2;

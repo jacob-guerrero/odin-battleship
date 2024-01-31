@@ -1,6 +1,6 @@
 const cellSize = 30; // Size of each cell
 let idShip = 0;
-const shipContainer = document.querySelector(".ship-container")
+const shipContainer = document.querySelector(".ship-container");
 
 const enableDragAndDrop = (gameboard, ships) => {
   ships.forEach((ship) => {

@@ -21,7 +21,8 @@ const renderGameboard = (elementId, gameboard) => {
   }
 
   if (elementId === "player2-board") {
-    boardElement.classList.add("hidden")
+    boardElement.classList.add("hidden");
+    boardElement.classList.remove("board-opacity");
   }
 };
 
@@ -51,11 +52,15 @@ const placeShipsRandomly = (gameboard, ships) => {
 
     // Generate random coordinates within the game board boundaries
     if (isVertical) {
-      xCoord = Math.floor(Math.random() * (gameboard.gameBoard.length - ship.length + 1));
+      xCoord = Math.floor(
+        Math.random() * (gameboard.gameBoard.length - ship.length + 1)
+      );
       yCoord = Math.floor(Math.random() * gameboard.gameBoard[0].length);
     } else {
       xCoord = Math.floor(Math.random() * gameboard.gameBoard.length);
-      yCoord = Math.floor(Math.random() * (gameboard.gameBoard[0].length - ship.length + 1));
+      yCoord = Math.floor(
+        Math.random() * (gameboard.gameBoard[0].length - ship.length + 1)
+      );
     }
 
     // Check if the randomly chosen position is valid for the ship
@@ -84,33 +89,39 @@ const placeShipsRandomly = (gameboard, ships) => {
   }
 };
 
-const placeShipRepresentations = (gameBoard, ships) => {  
+const placeShipRepresentations = (gameBoard, ships) => {
   let idShipRep = 0;
-  const fbGameBoard = gameBoard === "player1-board" ? "fb-ships-1" : "fb-ships-2";
+  const fbGameBoard =
+    gameBoard === "player1-board" ? "fb-ships-1" : "fb-ships-2";
   const fbContainer = document.querySelector(`.${fbGameBoard}`);
 
-  ships.forEach(ship => {
+  ships.forEach((ship) => {
     // Create ship representation element
-    const shipElement = document.createElement('div');
+    const shipElement = document.createElement("div");
     shipElement.dataset.shipRep = idShipRep;
-    shipElement.classList.add('ship-rep');
+    shipElement.classList.add("ship-rep");
     const shipSize = 12;
     // Customize style based on length
     for (let i = 0; i < ship.length; i++) {
-      const shipCell = document.createElement('div');
-      shipCell.classList.add('ship-rep-cell');
+      const shipCell = document.createElement("div");
+      shipCell.classList.add("ship-rep-cell");
 
       shipCell.style.width = `${shipSize}px`;
       shipCell.style.height = `${shipSize}px`;
 
       shipElement.appendChild(shipCell);
     }
-    
+
     idShipRep += 1;
     fbContainer.appendChild(shipElement);
   });
-  
+
   idShipRep = 0;
 };
 
-module.exports = { renderGameboard, updateCellValue, placeShipsRandomly, placeShipRepresentations };
+module.exports = {
+  renderGameboard,
+  updateCellValue,
+  placeShipsRandomly,
+  placeShipRepresentations,
+};

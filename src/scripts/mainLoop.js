@@ -19,11 +19,11 @@ const initializeGame = () => {
   const player1 = Player("Player 1");
   const player2 = Player("Computer");
 
-  const ship1 = Ship(3);
-  const ship2 = Ship(3);
   // Samples ships
+  /* const ship1 = Ship(3);
+  const ship2 = Ship(3);
   player1Gameboard.placeShip(ship1, 0, 0, false);
-  player2Gameboard.placeShip(ship2, 2, 2, true);
+  player2Gameboard.placeShip(ship2, 2, 2, true); */
 
   // Allow Player 1 to drag and drop ships
   DragDrop.enableDragAndDrop(player1Gameboard, ships);
@@ -123,48 +123,61 @@ const computerLogic = (gameboard, player2) => {
   }
 };
 const checkShipSunk = (opponentPlayerShips, currentPlayer, player1, x, y) => {
-  const opponentPlayerBoard = currentPlayer === player1 ? "player2-board" : "player1-board";
+  const opponentPlayerBoard =
+    currentPlayer === player1 ? "player2-board" : "player1-board";
   const fbShipsRep = currentPlayer === player1 ? "fb-ships-2" : "fb-ships-1";
-  const cellClicked = document.querySelector(`#${opponentPlayerBoard} .cell[data-x="${x}"][data-y="${y}"]`);
+  const cellClicked = document.querySelector(
+    `#${opponentPlayerBoard} .cell[data-x="${x}"][data-y="${y}"]`
+  );
 
   opponentPlayerShips.forEach((ship, shipIndex) => {
     const isVertical = ship.coordinates[0][0] === ship.coordinates[1][0];
     const sunkShip = ship.isSunk();
 
-    if (sunkShip && !cellClicked.classList.contains("ship-sunk") && !ship.processed) {
+    if (
+      sunkShip &&
+      !cellClicked.classList.contains("ship-sunk") &&
+      !ship.processed
+    ) {
       if (isVertical) {
         ship.coordinates.forEach(([row, col], index) => {
-          const cellElement = document.querySelector(`#${opponentPlayerBoard} .cell[data-x="${row}"][data-y="${col}"]`);
+          const cellElement = document.querySelector(
+            `#${opponentPlayerBoard} .cell[data-x="${row}"][data-y="${col}"]`
+          );
           if (index === 0) {
-            cellElement.classList.add('ship-sunk', 'left-h');
+            cellElement.classList.add("ship-sunk", "left-h");
           } else if (index === ship.coordinates.length - 1) {
-            cellElement.classList.add('ship-sunk', 'right-h');
+            cellElement.classList.add("ship-sunk", "right-h");
           } else {
-            cellElement.classList.add('ship-sunk', 'middle-h');
+            cellElement.classList.add("ship-sunk", "middle-h");
           }
-        });  
+        });
       } else {
         ship.coordinates.forEach(([row, col], index) => {
-          const cellElement = document.querySelector(`#${opponentPlayerBoard} .cell[data-x="${row}"][data-y="${col}"]`);
+          const cellElement = document.querySelector(
+            `#${opponentPlayerBoard} .cell[data-x="${row}"][data-y="${col}"]`
+          );
           if (index === 0) {
-            cellElement.classList.add('ship-sunk', 'top-v');
+            cellElement.classList.add("ship-sunk", "top-v");
           } else if (index === ship.coordinates.length - 1) {
-            cellElement.classList.add('ship-sunk', 'bottom-v');
+            cellElement.classList.add("ship-sunk", "bottom-v");
           } else {
-            cellElement.classList.add('ship-sunk', 'middle-v');
+            cellElement.classList.add("ship-sunk", "middle-v");
           }
-        });  
+        });
       }
 
       ship.processed = true;
       console.log(shipIndex);
-      const dataRepCells = document.querySelectorAll(`.${fbShipsRep} [data-ship-rep="${shipIndex}"] .ship-rep-cell`);
-      dataRepCells.forEach(cell => {
+      const dataRepCells = document.querySelectorAll(
+        `.${fbShipsRep} [data-ship-rep="${shipIndex}"] .ship-rep-cell`
+      );
+      dataRepCells.forEach((cell) => {
         cell.style.backgroundColor = "red";
       });
     }
   });
-}
+};
 
 const gameLoop = (player1, player2, player1Gameboard, player2Gameboard) => {
   const enemyBoardElement = document.getElementById(`player2-board`);
@@ -223,9 +236,11 @@ const gameLoop = (player1, player2, player1Gameboard, player2Gameboard) => {
   const updateFbText = (currentPlayer, player1, x, y) => {
     const fbTitle = document.querySelector(".fb-title");
     const fbText = document.querySelector(".fb-text");
+    const player2Board = document.querySelector("#player2-board");
 
     if (currentPlayer.name === player1.name) {
       fbTitle.textContent = "Opponent's Turn";
+      player2Board.classList.add("board-opacity");
 
       switch (player2Gameboard.gameBoard[x][y]) {
         case 2:
@@ -237,6 +252,7 @@ const gameLoop = (player1, player2, player1Gameboard, player2Gameboard) => {
       }
     } else {
       fbTitle.textContent = "Your Turn";
+      player2Board.classList.remove("board-opacity");
     }
   };
 
