@@ -3,6 +3,7 @@ const Player = require("./player");
 const Ship = require("./ship");
 const Doom = require("./doom");
 const DragDrop = require("./dragDrop");
+import "../styles/style.css";
 
 const interact = require("interactjs");
 
