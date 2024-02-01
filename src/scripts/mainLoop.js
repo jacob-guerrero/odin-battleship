@@ -93,6 +93,7 @@ const endGame = () => {
     fbTitle.textContent = "You Lost!";
   } else {
     fbTitle.textContent = "You Won!";
+    Doom.confettiExplosion();
   }
 
   fbText.textContent = "Click RESTART to play again";
@@ -169,7 +170,6 @@ const checkShipSunk = (opponentPlayerShips, currentPlayer, player1, x, y) => {
       }
 
       ship.processed = true;
-      console.log(shipIndex);
       const dataRepCells = document.querySelectorAll(
         `.${fbShipsRep} [data-ship-rep="${shipIndex}"] .ship-rep-cell`
       );
