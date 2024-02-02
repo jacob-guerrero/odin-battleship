@@ -1,5 +1,6 @@
 const Player = (name) => {
   const attacks = [];
+  let lastHitCoordinates = null; // Store the last hit coordinates
 
   const makeRandomAttack = (opponentGameboard) => {
     // Generate random coordinates
@@ -25,7 +26,7 @@ const Player = (name) => {
     }
   };
 
-  return { name, makeRandomAttack, attack };
+  return { name, makeRandomAttack, attack, lastHitCoordinates, attacks };
 };
 
 module.exports = Player;
