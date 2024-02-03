@@ -103,16 +103,6 @@ const endGame = () => {
   btnReset.addEventListener("click", restartGame);
 };
 
-const isValidTarget = (x, y, player) => {
-  // Check if the coordinates are within the bounds of the gameboard
-  const withinBounds = x >= 0 && x < 10 && y >= 0 && y < 10;
-
-  // Check if the slot hasn't been attacked before
-  const notAttackedBefore = !player.attacks.some((coord) => coord[0] === x && coord[1] === y);
-
-  console.log(withinBounds, notAttackedBefore)
-  return withinBounds && notAttackedBefore;
-};
 const playerLogic = (gameboard, x, y, player1) => {
   player1.attack(x, y, gameboard);
 
@@ -122,6 +112,17 @@ const playerLogic = (gameboard, x, y, player1) => {
   if (cellToUpdate) {
     Doom.updateCellValue(cellToUpdate, gameboard.gameBoard[x][y]);
   }
+};
+const isValidTarget = (x, y, player) => {
+  // Check if the coordinates are within the bounds of the gameboard
+  const withinBounds = x >= 0 && x < 10 && y >= 0 && y < 10;
+
+  // Check if the slot hasn't been attacked before
+  const notAttackedBefore = !player.attacks.some(
+    (coord) => coord[0] === x && coord[1] === y
+  );
+
+  return withinBounds && notAttackedBefore;
 };
 const computerLogic = (gameboard, player2) => {
   const player = player2;
@@ -197,28 +198,31 @@ const computerLogic = (gameboard, player2) => {
 
     ships.forEach((ship) => {
       const sunkShip = ship.isSunk();
-      
+
       // If the ship is sunk, filter out its coordinates from the queue of shots
       if (sunkShip && !ship.coordsProcessed) {
         const sunkAndAdjacentCoords = ship.coordinates.flatMap(([x, y]) => {
           const adjacentSlots = [
-              [x, y - 1], // Left
-              [x, y + 1], // Right
-              [x - 1, y], // Up
-              [x + 1, y], // Down
+            [x, y - 1], // Left
+            [x, y + 1], // Right
+            [x - 1, y], // Up
+            [x + 1, y], // Down
           ];
-          return [ ...adjacentSlots, [x, y] ];
+          return [...adjacentSlots, [x, y]];
         });
-      
+
         player.computerAttack = player.computerAttack.filter(([x, y]) => {
-            return !sunkAndAdjacentCoords.some(([coordX, coordY]) => coordX === x && coordY === y);
+          return !sunkAndAdjacentCoords.some(
+            ([coordX, coordY]) => coordX === x && coordY === y
+          );
         });
 
         ship.coordsProcessed = true;
       }
-  });
+    });
   }
 };
+
 const checkShipSunk = (opponentPlayerShips, currentPlayer, player1, x, y) => {
   const opponentPlayerBoard =
     currentPlayer === player1 ? "player2-board" : "player1-board";
@@ -324,7 +328,7 @@ const gameLoop = (player1, player2, player1Gameboard, player2Gameboard) => {
         enemyBoardElement.removeEventListener("click", inputAttack);
         setTimeout(() => {
           handleAttack(x, y);
-        }, 100);
+        }, randomDelay);
       }
     }
   };

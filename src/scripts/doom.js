@@ -162,11 +162,11 @@ const confettiExplosion = () => {
 const lostEffect = () => {
   const body = document.querySelector("body");
   body.classList.add("lost");
-  
+
   setTimeout(() => {
     body.classList.remove("lost");
   }, 600);
-}
+};
 
 module.exports = {
   renderGameboard,
@@ -174,5 +174,5 @@ module.exports = {
   placeShipsRandomly,
   placeShipRepresentations,
   confettiExplosion,
-  lostEffect
+  lostEffect,
 };
