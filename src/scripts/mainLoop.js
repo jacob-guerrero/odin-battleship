@@ -91,6 +91,7 @@ const endGame = () => {
 
   if (player1Gameboard.allShipsSunk()) {
     fbTitle.textContent = "You Lost!";
+    Doom.lostEffect();
   } else {
     fbTitle.textContent = "You Won!";
     Doom.confettiExplosion();
@@ -212,7 +213,7 @@ const computerLogic = (gameboard, player2) => {
         player.computerAttack = player.computerAttack.filter(([x, y]) => {
             return !sunkAndAdjacentCoords.some(([coordX, coordY]) => coordX === x && coordY === y);
         });
-        
+
         ship.coordsProcessed = true;
       }
   });
