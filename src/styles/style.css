@@ -151,6 +151,10 @@ h1, h2, h3, p {
   border: 2px solid #ddd;
   background-color: gray;
 }
+.draggable {
+  touch-action: none;
+  user-select: none;
+}
 
 .drag-drop {
   display: inline-block;
