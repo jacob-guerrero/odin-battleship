@@ -13,9 +13,9 @@ This project is a classic board game called Battleship, it is implemented using 
 ## Installation
 To play Battleship Game, simply clone the repository to your local machine and open index.html in a web browser.
 
-```
+```bash
 git clone https://github.com/jacob-guerrero/odin-battleship.git
-cd battleship-game
+cd odin-battleship
 ```
 
 ## Usage
